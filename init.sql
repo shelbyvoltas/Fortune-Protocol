@@ -3,14 +3,14 @@
 -- Sequelize handles table creation and migration via sync({ alter: true }).
 
 -- Create the database (if not already created by POSTGRES_DB env var)
-SELECT 'CREATE DATABASE crypto_fortune'
-WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'crypto_fortune')\gexec
+SELECT 'CREATE DATABASE "BLove-Krack"'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'BLove-Krack')\gexec
 
 -- Grant privileges
-GRANT ALL PRIVILEGES ON DATABASE crypto_fortune TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE "BLove-Krack" TO postgres;
 
--- Connect to the crypto_fortune database
-\c crypto_fortune
+-- Connect to the BLove-Krack database
+\c "BLove-Krack"
 
 -- Enable useful extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
