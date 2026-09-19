@@ -1,0 +1,66 @@
+# ─── .dockerignore ─────────────────────────────────────────
+# Prevents sensitive and unnecessary files from entering Docker build context
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Version control
+.git
+.gitignore
+
+# Dependencies (installed inside container)
+node_modules
+
+# IDE / Editor
+.vscode
+.idea
+*.swp
+*.swo
+.zencoder
+.zenflow
+.agents
+
+# Tests
+test/
+testbackup/
+coverage/
+scratch/
+
+# Legacy files (not needed in production)
+.legacy/
+index.legacy.html
+referral.html
+referral.legacy.html
+script.js
+style.css
+admin/
+*.webp
+
+# Build artifacts (rebuilt in container)
+dist/
+build/
+cache/
+artifacts/
+
+# Hardhat
+hardhat.config.js
+contracts/
+
+# Documentation
+*.md
+DOCKER.md
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+reference_site_capture_*.webp
+test-db.js

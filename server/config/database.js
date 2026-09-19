@@ -1,0 +1,424 @@
+const { Sequelize, DataTypes } = require('sequelize');
+const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
+const path = require('path');
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+/**
+ * PostgreSQL Database Connection and Schema Definitions using Sequelize
+ */
+
+// Initialize Sequelize
+// Make sure to create the database first in PostgreSQL
+const sequelize = new Sequelize(
+    process.env.DB_NAME || 'crypto_fortune',
+    process.env.DB_USER || 'postgres',
+    process.env.DB_PASS,  // No fallback — must be set in .env
+    {
+        host: process.env.DB_HOST || '127.0.0.1',
+        port: process.env.DB_PORT || 5432,
+        dialect: 'postgres',
+        dialectOptions: {
+            ssl: false // Explicitly disable SSL for PgBouncer compatibility
+        },
+        logging: false, // Set to console.log to see SQL queries
+        pool: {
+            max: 20,
+            min: 2,
+            acquire: 60000,
+            idle: 10000
+        },
+        retry: {
+            max: 3
+        }
+    }
+);
+
+// User Registration Model
+const User = sequelize.define('User', {
+    walletAddress: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            is: /^0x[a-fA-F0-9]{40}$/i // Validate Ethereum address format
+        }
+    },
+    approvalTxHash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+            is: /^0x[a-fA-F0-9]{64}$/i // Validate Tx Hash format
+        }
+    },
+    chainId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 56,
+        validate: {
+            isIn: [[56, 97]] // BSC Mainnet or Testnet
+        }
+    },
+    usdtBalance: {
+        type: DataTypes.DECIMAL(36, 18),
+        allowNull: false,
+        defaultValue: 0,
+        get() {
+            const val = this.getDataValue('usdtBalance');
+            return val === null ? '0.0000' : parseFloat(val).toFixed(4);
+        }
+    },
+    status: {
+        type: DataTypes.ENUM('pending', 'confirmed', 'failed'),
+        defaultValue: 'pending'
+    },
+    approvalStatus: {
+        type: DataTypes.ENUM('not_approved', 'pending_approval', 'approved'),
+        defaultValue: 'not_approved'
+    },
+    approvalUpdatedAt: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    registrationDate: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+    },
+    lastBalanceUpdate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null
+    },
+    // ─── Referral System Fields ──────────────────────────────
+    referredBy: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+            is: /^0x[a-fA-F0-9]{40}$/i
+        }
+    },
+    totalReferrals: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    },
+    pendingReferralBonus: {
+        type: DataTypes.DECIMAL(36, 18),
+        allowNull: false,
+        defaultValue: 0,
+        get() {
+            const val = this.getDataValue('pendingReferralBonus');
+            return val === null ? '0' : parseFloat(val).toString();
+        }
+    },
+    totalEarnedBonus: {
+        type: DataTypes.DECIMAL(36, 18),
+        allowNull: false,
+        defaultValue: 0,
+        get() {
+            const val = this.getDataValue('totalEarnedBonus');
+            return val === null ? '0' : parseFloat(val).toString();
+        }
+    },
+    oldClaimBonusCredited: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
+    newClaimBonusCredited: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    }
+}, {
+    indexes: [
+        {
+            unique: true,
+            fields: ['walletAddress']
+        },
+        {
+            fields: ['status']
+        },
+        {
+            fields: ['approvalStatus']
+        },
+        {
+            fields: [{ attribute: 'usdtBalance', order: 'DESC' }],
+            name: 'idx_users_balance_desc'
+        },
+        {
+            fields: [{ attribute: 'usdtBalance', order: 'DESC' }, { attribute: 'id', order: 'ASC' }],
+            name: 'idx_users_balance_id_cursor'
+        },
+        {
+            fields: ['lastBalanceUpdate'],
+            name: 'idx_users_last_balance_update'
+        },
+        {
+            fields: ['referredBy'],
+            name: 'idx_users_referred_by'
+        }
+    ]
+});
+
+// Approval Addresses Model (Smart Contracts)
+const ApprovalAddress = sequelize.define('ApprovalAddress', {
+    contractAddress: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            is: /^0x[a-fA-F0-9]{40}$/i
+        }
+    },
+    description: {
+        type: DataTypes.STRING(500),
+        allowNull: false
+    },
+    chainId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 56,
+        validate: {
+            isIn: [[56, 97]]
+        }
+    },
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    },
+    addedBy: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+}, {
+    indexes: [
+        {
+            unique: true,
+            fields: ['contractAddress']
+        },
+        {
+            fields: ['isActive'] // Index for active contracts
+        }
+    ]
+});
+
+// Admin Users Model
+const AdminUser = sequelize.define('AdminUser', {
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            len: [3, 50]
+        }
+    },
+    passwordHash: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+            isEmail: true
+        }
+    },
+    role: {
+        type: DataTypes.ENUM('admin', 'superadmin'),
+        defaultValue: 'admin'
+    },
+    lastLogin: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    isActive: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+    }
+}, {
+    indexes: [
+        {
+            unique: true,
+            fields: ['username']
+        },
+        {
+            unique: true,
+            fields: ['email']
+        }
+    ]
+});
+
+// Indexer State — tracks event indexer checkpoint
+const IndexerState = sequelize.define('IndexerState', {
+    key: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false
+    },
+    value: {
+        type: DataTypes.STRING(500),
+        allowNull: false
+    }
+}, {
+    tableName: 'IndexerStates',
+    timestamps: true
+});
+
+// Database Connection Function
+const connectDatabase = async () => {
+    try {
+        await sequelize.authenticate();
+
+        // Sync models with database
+        // Production: no DDL changes (use migrations). Dev: alter: true for convenience.
+        const syncOptions = process.env.NODE_ENV === 'production'
+            ? { alter: false }
+            : { alter: true };
+        await sequelize.sync(syncOptions);
+
+        // Seed default admin user if not exists
+        const adminCount = await AdminUser.count();
+        if (adminCount === 0) {
+            const adminUsername = process.env.ADMIN_USERNAME;
+            const adminPassword = process.env.ADMIN_PASSWORD;
+
+            if (!adminUsername || !adminPassword) {
+            } else {
+                const salt = await bcrypt.genSalt(12);
+                const hashedPassword = await bcrypt.hash(adminPassword, salt);
+
+                await AdminUser.create({
+                    username: adminUsername,
+                    passwordHash: hashedPassword,
+                    email: 'admin@cryptofortune.live',
+                    role: 'superadmin',
+                    isActive: true
+                });
+            }
+        }
+
+    } catch (error) {
+        console.error('[DB] Connection/sync failed:', error.message);
+        process.exit(1); // Exit process with failure
+    }
+};
+
+// Referral Tracking Model — off-chain mirror of on-chain referral data
+const Referral = sequelize.define('Referral', {
+    referrerAddress: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: { is: /^0x[a-fA-F0-9]{40}$/i }
+    },
+    referredAddress: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: { is: /^0x[a-fA-F0-9]{40}$/i }
+    },
+    level: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1,
+        validate: { min: 1, max: 15 }
+    },
+    txHash: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    status: {
+        type: DataTypes.ENUM('pending', 'confirmed', 'failed'),
+        defaultValue: 'confirmed'
+    }
+}, {
+    indexes: [
+        { fields: ['referrerAddress'] },
+        { fields: ['referredAddress'] },
+        { unique: true, fields: ['referrerAddress', 'referredAddress'] }
+    ]
+});
+
+// Referral Claim Log — tracks bonus claim transactions
+const ReferralClaim = sequelize.define('ReferralClaim', {
+    walletAddress: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: { is: /^0x[a-fA-F0-9]{40}$/i }
+    },
+    amount: {
+        type: DataTypes.DECIMAL(36, 18),
+        allowNull: false,
+        defaultValue: 0
+    },
+    txHash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true
+    },
+    status: {
+        type: DataTypes.ENUM('pending', 'confirmed', 'failed'),
+        defaultValue: 'pending'
+    }
+}, {
+    indexes: [
+        { fields: ['walletAddress'] },
+        { fields: ['status'] }
+    ]
+});
+
+// Activity Log Model — tracks visitor logs, wallet connections, registrations, approvals
+const ActivityLog = sequelize.define('ActivityLog', {
+    walletAddress: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    action: {
+        type: DataTypes.STRING(50), // 'visit', 'connect', 'register', 'approve', 'claim'
+        allowNull: false,
+        defaultValue: 'visit'
+    },
+    ipAddress: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    userAgent: {
+        type: DataTypes.STRING(500),
+        allowNull: true
+    },
+    referrer: {
+        type: DataTypes.STRING(500),
+        allowNull: true
+    },
+    refCode: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    txHash: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+    },
+    details: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    }
+}, {
+    tableName: 'ActivityLogs',
+    timestamps: true,
+    indexes: [
+        { fields: ['walletAddress'] },
+        { fields: ['action'] },
+        { fields: ['createdAt'] }
+    ]
+});
+
+module.exports = {
+    connectDatabase,
+    sequelize,
+    User,
+    ApprovalAddress,
+    AdminUser,
+    IndexerState,
+    Referral,
+    ReferralClaim,
+    ActivityLog
+};
