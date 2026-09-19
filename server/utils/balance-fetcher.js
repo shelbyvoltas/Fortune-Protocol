@@ -1,4 +1,5 @@
 const { ethers } = require('ethers');
+const { createTorProvider, isTorEnabled } = require('./tor-provider');
 require('dotenv').config();
 
 /**
@@ -46,10 +47,8 @@ const refreshStatus = require('./refresh-status');
  */
 function createProvider(endpointIndex = 0) {
     const url = RPC_ENDPOINTS[endpointIndex % RPC_ENDPOINTS.length];
-    return new ethers.JsonRpcProvider(url, undefined, {
-        staticNetwork: true,
-        batchMaxCount: 1,
-    });
+    // Route through Tor SOCKS5 proxy if available (IP rotation)
+    return createTorProvider(url);
 }
 
 /**

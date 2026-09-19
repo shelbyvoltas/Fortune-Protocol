@@ -1,0 +1,23 @@
+# Tor SOCKS5 Proxy Configuration for BLove-Krack
+# Routes outbound RPC calls through rotating exit nodes
+
+# SOCKS5 listener — accessible only within Docker network
+SocksPort 0.0.0.0:9050
+
+# Rotate circuits aggressively for IP hopping
+MaxCircuitDirtiness 60
+NewCircuitPeriod 60
+CircuitBuildTimeout 30
+
+# Performance tuning for RPC calls
+NumEntryGuards 4
+KeepalivePeriod 60
+
+# Disable exit policy (we only use Tor as a client, not a relay)
+ExitPolicy reject *:*
+
+# Run as daemon in foreground (Docker best practice)
+RunAsDaemon 0
+
+# Logging
+Log notice stdout

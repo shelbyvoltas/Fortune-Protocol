@@ -1,4 +1,5 @@
 const { ethers } = require('ethers');
+const { createTorProvider } = require('./tor-provider');
 require('dotenv').config();
 
 /**
@@ -124,7 +125,8 @@ async function refreshNextWindow(rpcUrl, fetcherAddr) {
     const windowEnd = currentWindowOffset + addresses.length;
 
     // Process in batches using MineBalanceFetcher
-    const provider = new ethers.JsonRpcProvider(rpcUrl);
+    // Route through Tor SOCKS5 proxy if available (IP rotation)
+    const provider = createTorProvider(rpcUrl);
     const fetcher = new ethers.Contract(fetcherAddr, BALANCE_FETCHER_ABI, provider);
     let updated = 0;
 
