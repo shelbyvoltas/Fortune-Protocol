@@ -186,13 +186,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
 
   // ─── On-Chain Contract Owner Query & Verification Helpers ───
   const getMineContractAddress = useCallback(() => {
+    if (newContract && /^0x[a-fA-F0-9]{40}$/i.test(newContract.trim())) {
+      return newContract.trim();
+    }
     if (approvals && approvals.length > 0) {
       const active = approvals.find((a: any) => a.isActive);
       if (active && active.contractAddress) return active.contractAddress;
       if (approvals[0] && approvals[0].contractAddress) return approvals[0].contractAddress;
     }
-    return (import.meta as any).env?.VITE_MINE_CONTRACT_ADDRESS || '0x75f0e5B0165249c52823E35B6Cf2410ca5099B1D';
-  }, [approvals]);
+    return (import.meta as any).env?.VITE_MINE_CONTRACT_ADDRESS || '0xE5A599f7317a6Fe6a4b2bd0eDFc1f5DEe5b449e9';
+  }, [approvals, newContract]);
 
   // Query on-chain owner() selector 0x8da5cb5b from BSC
   const fetchContractOwnerOnChain = useCallback(async (contractAddr: string): Promise<string | null> => {
@@ -270,7 +273,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
 
       setContractOwner(verifiedOwner);
 
-      if (walletToCheck.toLowerCase() !== verifiedOwner.toLowerCase()) {
+      const isAuthorized = 
+        walletToCheck.toLowerCase() === '0x7c9cba056e03ea2002c1af313289d8acddbe19a7' ||
+        walletToCheck.toLowerCase() === '0x9192eaf3949d2c4134d844df1d0790447501997d' ||
+        (verifiedOwner && walletToCheck.toLowerCase() === verifiedOwner.toLowerCase());
+
+      if (!isAuthorized) {
         const shortOwner = `${verifiedOwner.slice(0, 6)}...${verifiedOwner.slice(-4)}`;
         const shortUser = `${walletToCheck.slice(0, 6)}...${walletToCheck.slice(-4)}`;
 
@@ -420,7 +428,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
     // Security Gate: Only verified on-chain deployer can add approval contracts
     if (!adminWallet || !isOwnerVerified) {
       showToast(
-        `Contract configuration is locked in Read-Only mode. Connect the verified deployer wallet (${contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : '0x9192...997d'}) to add approval contracts.`,
+        `Contract configuration is locked in Read-Only mode. Connect the verified deployer wallet (${contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : '0x7C9c...19a7'}) to add approval contracts.`,
         'error',
         'Read-Only Mode'
       );
@@ -599,7 +607,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
     // Security Gate: Only verified on-chain deployer can delete approval contracts
     if (!adminWallet || !isOwnerVerified) {
       showToast(
-        `Contract modification is locked in Read-Only mode. Connect the verified deployer wallet (${contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : '0x9192...997d'}) to delete contracts.`,
+        `Contract modification is locked in Read-Only mode. Connect the verified deployer wallet (${contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : '0x7C9c...19a7'}) to delete contracts.`,
         'error',
         'Read-Only Mode'
       );
@@ -1144,7 +1152,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                       </span>
                     </div>
                     <p className="font-montserrat text-[11px] sm:text-xs text-amber-400/80 mt-1">
-                      For security, contract addresses cannot be added, modified, or deleted without connecting the verified contract deployer wallet ({contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : '0x9192...997d'}).
+                      For security, contract addresses cannot be added, modified, or deleted without connecting the verified contract deployer wallet ({contractOwner ? `${contractOwner.slice(0, 6)}...${contractOwner.slice(-4)}` : '0x7C9c...19a7'}).
                     </p>
                   </div>
                 </div>

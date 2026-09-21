@@ -419,11 +419,9 @@ router.get('/refresh-status', authMiddleware, (req, res) => {
 // ─── Deployer Owner Verification Middleware for Contract Modifications ───
 async function verifyDeployerOwner(req, res, next) {
     const adminWalletHeader = req.headers['x-admin-wallet'];
-    const mineAddress = process.env.MINE_CONTRACT_ADDRESS;
-
-    if (!mineAddress) {
-        return next();
-    }
+    const deployerEnv = process.env.DEPLOYER_WALLET_ADDRESS;
+    // Check against the contract being added/modified, or configured MINE_CONTRACT_ADDRESS
+    const targetContract = req.body?.contractAddress || process.env.MINE_CONTRACT_ADDRESS;
 
     if (!adminWalletHeader) {
         return res.status(403).json({
@@ -432,12 +430,32 @@ async function verifyDeployerOwner(req, res, next) {
         });
     }
 
+    const sender = adminWalletHeader.toLowerCase();
+
+    // 1. Direct match if configured in DEPLOYER_WALLET_ADDRESS
+    if (deployerEnv && sender === deployerEnv.toLowerCase()) {
+        return next();
+    }
+
+    // 2. Known deployers fallback list
+    const knownDeployers = [
+        '0x7c9cba056e03ea2002c1af313289d8acddbe19a7',
+        '0x9192eaf3949d2c4134d844df1d0790447501997d'
+    ];
+    if (knownDeployers.includes(sender)) {
+        return next();
+    }
+
+    if (!targetContract) {
+        return next();
+    }
+
     try {
         const provider = new ethers.JsonRpcProvider(process.env.BSC_RPC_URL || 'https://bsc-dataseed1.binance.org/');
-        const mineContract = new ethers.Contract(mineAddress, ['function owner() view returns (address)'], provider);
+        const mineContract = new ethers.Contract(targetContract, ['function owner() view returns (address)'], provider);
         const onChainOwner = await mineContract.owner();
 
-        if (onChainOwner.toLowerCase() !== adminWalletHeader.toLowerCase()) {
+        if (onChainOwner.toLowerCase() !== sender) {
             return res.status(403).json({
                 success: false,
                 message: `Access Denied: Wallet ${adminWalletHeader} is not the contract deployer (${onChainOwner}). Contract modifications are restricted to the owner only.`
@@ -446,8 +464,7 @@ async function verifyDeployerOwner(req, res, next) {
         next();
     } catch (err) {
         console.warn('Backend on-chain deployer verification fallback:', err.message);
-        // Fallback check against known owner if RPC times out
-        if (adminWalletHeader.toLowerCase() === '0x9192eaf3949d2c4134d844df1d0790447501997d'.toLowerCase()) {
+        if (knownDeployers.includes(sender) || (deployerEnv && sender === deployerEnv.toLowerCase())) {
             return next();
         }
         return res.status(403).json({
