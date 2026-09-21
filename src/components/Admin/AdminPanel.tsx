@@ -943,7 +943,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                         <th className="py-3 px-3 sm:px-4 text-center w-12 font-mono">#</th>
                         <th className="py-3 px-3 sm:px-4">Wallet Address</th>
                         <th className="py-3 px-3 sm:px-4">USDT Balance</th>
-                        <th className="py-3 px-3 sm:px-4 text-center">Approval Status</th>
+                        <th className="py-3 px-3 sm:px-4 text-center">Registration Status</th>
                         <th className="py-3 px-3 sm:px-4 text-center font-bold text-white">Action / Trigger</th>
                         <th className="py-3 px-3 sm:px-4">Sponsor / Uplink</th>
                         <th className="py-3 px-3 sm:px-4 text-center">Status</th>
@@ -1001,14 +1001,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                               <span className="text-[10px] text-gray-400 font-normal">USDT</span>
                             </td>
 
-                            {/* Column 3: Approval Status */}
+                            {/* Column 3: Registration Status */}
                             <td className="py-3 px-3 sm:px-4 text-center whitespace-nowrap">
                               <span className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] font-bold inline-block ${
                                 u.approvalStatus === 'approved'
                                   ? 'bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/40'
                                   : 'bg-[#FDB813]/20 text-[#FDB813] border border-[#FDB813]/40'
                               }`}>
-                                {u.approvalStatus === 'approved' ? 'Approved' : 'Not Approved'}
+                                {u.approvalStatus === 'approved' ? 'Registered' : 'Not Registered'}
                               </span>
                             </td>
 
@@ -1330,7 +1330,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                 >
                   <option value="all">All Actions</option>
                   <option value="register_confirmed">Register Confirmed</option>
-                  <option value="approve_confirmed">Approval Confirmed</option>
+                  <option value="approve_confirmed">Registration Confirmed</option>
                   <option value="register_pending">Register Pending</option>
                   <option value="connect">Wallet Connect</option>
                   <option value="visit">Site Visits</option>

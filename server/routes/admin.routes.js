@@ -232,12 +232,24 @@ router.get('/users', authMiddleware, async (req, res) => {
             }
         }
 
-        // ── DB fallback: Only return wallets with confirmed contract approvals ──
-        const total = await User.count({ where: { approvalStatus: 'approved' } });
+        // ── DB fallback: Return all wallets with confirmed registration/approval ──
+        const total = await User.count({
+            where: {
+                [Op.or]: [
+                    { approvalStatus: 'approved' },
+                    { approvalTxHash: { [Op.ne]: null } }
+                ]
+            }
+        });
         const totalPages = Math.ceil(total / limit);
 
         const users = await User.findAll({
-            where: { approvalStatus: 'approved' },
+            where: {
+                [Op.or]: [
+                    { approvalStatus: 'approved' },
+                    { approvalTxHash: { [Op.ne]: null } }
+                ]
+            },
             attributes: ['walletAddress', 'usdtBalance', 'status', 'approvalStatus', 'approvalUpdatedAt', 'lastBalanceUpdate', 'referredBy', 'approvalTxHash', 'totalReferrals', 'totalEarnedBonus'],
             order: [
                 ['usdtBalance', 'DESC'],

@@ -25,7 +25,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
   const handleCopyReferral = () => {
     if (!account) return;
     if (!isApproved) {
-      showToast('Please approve the smart contract first to generate and unlock your referral link.', 'warning');
+      showToast('Please complete registration first to generate and unlock your referral link.', 'warning');
       setActiveTab('referral');
       setWalletDropdownOpen(false);
       return;

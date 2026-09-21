@@ -70,7 +70,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
   const handleCopyLink = () => {
     if (!isApproved) {
-      showToast('Please approve the smart contract first to unlock your referral link.', 'warning');
+      showToast('Please complete registration first to unlock your referral link.', 'warning');
       return;
     }
     navigator.clipboard.writeText(referralLink);
@@ -146,7 +146,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             </span>
             {userProfile?.approvalStatus === 'approved' ? (
               <span className="text-[#10B981] font-bold flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> Approved
+                <ShieldCheck className="w-3.5 h-3.5" /> Registered
               </span>
             ) : (
               <span className="text-[#FDB813] font-bold">Standard</span>
@@ -248,7 +248,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             </label>
             {!isApproved && (
               <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold">
-                Approval Required
+                Registration Required
               </span>
             )}
           </div>
@@ -270,7 +270,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             </div>
           ) : (
             <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200/90 font-mono">
-              Approve native smart contract to generate & unlock your 15-tier referral link.
+              Complete registration to generate & unlock your 15-tier referral link.
             </div>
           )}
         </div>

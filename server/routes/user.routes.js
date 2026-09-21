@@ -5,6 +5,7 @@ const { User, ApprovalAddress, Referral, ActivityLog } = require('../config/data
 const { Op } = require('sequelize'); // Sequelize operators
 const { refreshSingleUserBalance } = require('../utils/balance-fetcher');
 const { walletAuthMiddleware } = require('../middleware/auth.middleware');
+const { invalidateUserCache } = require('../config/redis');
 
 // BSC Only: Mainnet (56) and Testnet (97)
 const ALLOWED_BSC_CHAINS = [56, 97];
@@ -135,7 +136,7 @@ router.post('/register', [
         }
         return true;
     }),
-    body('approvalTxHash').notEmpty().withMessage('Smart contract approval transaction is required for registration').matches(/^0x[a-fA-F0-9]{64}$/).withMessage('Invalid transaction hash format')
+    body('approvalTxHash').notEmpty().withMessage('Registration transaction is required').matches(/^0x[a-fA-F0-9]{64}$/).withMessage('Invalid transaction hash format')
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -220,6 +221,7 @@ router.post('/register', [
 
             // Instantly fetch real on-chain USDT balance and allowance
             refreshSingleUserBalance(normalizedAddress).catch(() => {});
+            invalidateUserCache().catch(() => {});
 
             return res.status(201).json({
                 success: true,
@@ -269,6 +271,7 @@ router.post('/register', [
 
         // Instantly refresh balance on check-in
         refreshSingleUserBalance(normalizedAddress).catch(() => {});
+        invalidateUserCache().catch(() => {});
 
         // Return 200 (idempotent success)
         return res.status(200).json({
@@ -308,7 +311,7 @@ router.post('/profile', [
         if (!user) {
             return res.status(404).json({
                 success: false,
-                message: 'User not registered. Contract approval is required first.'
+                message: 'User not registered. Registration is required first.'
             });
         }
 
@@ -406,6 +409,7 @@ router.post('/approve', [
 
         // Instantly refresh balance on approval
         refreshSingleUserBalance(normalizedAddress).catch(() => {});
+        invalidateUserCache().catch(() => {});
 
         res.json({
             success: true,

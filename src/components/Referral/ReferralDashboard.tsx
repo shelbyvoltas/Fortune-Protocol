@@ -118,7 +118,7 @@ export const ReferralDashboard: React.FC = () => {
           <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold ${
             isApproved ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-amber-500/20 text-amber-300'
           }`}>
-            {isApproved ? '15 TIERS ACTIVE' : 'APPROVAL PENDING'}
+            {isApproved ? '15 TIERS ACTIVE' : 'REGISTRATION PENDING'}
           </span>
         </div>
 
@@ -155,11 +155,11 @@ export const ReferralDashboard: React.FC = () => {
               </div>
               <div className="space-y-1">
                 <h4 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                  <span>Contract Approval Required</span>
+                  <span>Registration Required</span>
                   <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono uppercase tracking-wider">Locked</span>
                 </h4>
                 <p className="text-xs text-gray-300 max-w-xl">
-                  Approve the native smart contract with your connected wallet to activate your account and generate your 15-tier referral link.
+                  Complete registration with your connected wallet to activate your account and generate your 15-tier referral link.
                 </p>
               </div>
             </div>
@@ -174,7 +174,7 @@ export const ReferralDashboard: React.FC = () => {
               <span>
                 {txStatus === 'approval_pending' || txStatus === 'approval_required'
                   ? 'Confirming in Wallet...'
-                  : 'Approve Contract to Unlock Referral Link'}
+                  : 'Register to Unlock Referral Link'}
               </span>
             </button>
           </div>
