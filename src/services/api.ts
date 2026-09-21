@@ -67,6 +67,24 @@ export const api = {
     };
   },
 
+  async updateProfile(params: {
+    walletAddress: string;
+    name?: string;
+    email?: string;
+  }): Promise<{ success: boolean; message: string; user?: UserProfile }> {
+    try {
+      const res = await fetch(`${API_BASE}/users/profile`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params),
+      });
+      if (res.ok) return await res.json();
+    } catch (err) {
+      console.warn('Update profile API error:', err);
+    }
+    return { success: false, message: 'Profile update failed' };
+  },
+
   async recordApproval(params: {
     walletAddress: string;
     approvalTxHash: string;

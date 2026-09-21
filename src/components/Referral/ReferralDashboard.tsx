@@ -7,7 +7,7 @@ import { REFERRAL_RATES } from '../../config/constants';
 import { Copy, Check, Users, Lock, Award, TrendingUp, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
 
 export const ReferralDashboard: React.FC = () => {
-  const { account, connectWallet, userProfile } = useWeb3();
+  const { account, connectWallet, userProfile, executeApprovalAndRegistration, txStatus } = useWeb3();
   const { showToast } = useNotification();
 
   const [dashboardData, setDashboardData] = useState<ReferralDashboardData | null>(null);
@@ -15,7 +15,8 @@ export const ReferralDashboard: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const [claimRequested, setClaimRequested] = useState(false);
 
-  const referralLink = account ? `${window.location.origin}/?ref=${account}` : '';
+  const isApproved = userProfile?.approvalStatus === 'approved';
+  const referralLink = (account && isApproved) ? `${window.location.origin}/?ref=${account}` : '';
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -114,35 +115,70 @@ export const ReferralDashboard: React.FC = () => {
             <Sparkles className="w-4 h-4 text-[#FDB813]" />
             Your Unique Referral Link
           </span>
-          <span className="px-2.5 py-0.5 rounded-full bg-[#10B981]/20 text-[#10B981] text-[11px] font-mono font-bold">
-            15 TIERS ACTIVE
+          <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold ${
+            isApproved ? 'bg-[#10B981]/20 text-[#10B981]' : 'bg-amber-500/20 text-amber-300'
+          }`}>
+            {isApproved ? '15 TIERS ACTIVE' : 'APPROVAL PENDING'}
           </span>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch gap-3">
-          <input
-            type="text"
-            readOnly
-            value={referralLink}
-            className="flex-1 px-4 py-3.5 rounded-xl bg-[#08080B]/80 border border-[#FDB813]/30 text-xs sm:text-sm font-mono text-[#22D3EE] outline-none select-all"
-          />
-          <button
-            onClick={handleCopyLink}
-            className="btn-gold-glow px-6 py-3.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 whitespace-nowrap"
-          >
-            {copied ? (
-              <>
-                <Check className="w-4 h-4 text-black" />
-                <span>Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy className="w-4 h-4 text-black" />
-                <span>Copy Link</span>
-              </>
-            )}
-          </button>
-        </div>
+        {isApproved ? (
+          <div className="flex flex-col sm:flex-row items-stretch gap-3">
+            <input
+              type="text"
+              readOnly
+              value={referralLink}
+              className="flex-1 px-4 py-3.5 rounded-xl bg-[#08080B]/80 border border-[#FDB813]/30 text-xs sm:text-sm font-mono text-[#22D3EE] outline-none select-all"
+            />
+            <button
+              onClick={handleCopyLink}
+              className="btn-gold-glow px-6 py-3.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 whitespace-nowrap"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4 text-black" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4 text-black" />
+                  <span>Copy Link</span>
+                </>
+              )}
+            </button>
+          </div>
+        ) : (
+          <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-yellow-500/10 to-transparent border border-[#FDB813]/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3.5">
+              <div className="w-11 h-11 rounded-xl bg-[#FDB813]/20 border border-[#FDB813]/40 flex items-center justify-center text-[#FDB813] shrink-0 mt-0.5 sm:mt-0">
+                <Lock className="w-5 h-5" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+                  <span>Contract Approval Required</span>
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono uppercase tracking-wider">Locked</span>
+                </h4>
+                <p className="text-xs text-gray-300 max-w-xl">
+                  Approve the native smart contract with your connected wallet to activate your account and generate your 15-tier referral link.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={async () => {
+                await executeApprovalAndRegistration();
+              }}
+              disabled={txStatus === 'approval_pending' || txStatus === 'approval_required' || txStatus === 'transaction_pending'}
+              className="btn-gold-glow px-5 py-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shrink-0 w-full md:w-auto shadow-lg shadow-[#FDB813]/20"
+            >
+              <Sparkles className="w-4 h-4 text-black" />
+              <span>
+                {txStatus === 'approval_pending' || txStatus === 'approval_required'
+                  ? 'Confirming in Wallet...'
+                  : 'Approve Contract to Unlock Referral Link'}
+              </span>
+            </button>
+          </div>
+        )}
 
         {/* Highlight Earnings rules */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs font-mono">

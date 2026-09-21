@@ -20,8 +20,16 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
 
   const formattedAddress = account ? `${account.slice(0, 6)}...${account.slice(-4)}` : '';
 
+  const isApproved = userProfile?.approvalStatus === 'approved';
+
   const handleCopyReferral = () => {
     if (!account) return;
+    if (!isApproved) {
+      showToast('Please approve the smart contract first to generate and unlock your referral link.', 'warning');
+      setActiveTab('referral');
+      setWalletDropdownOpen(false);
+      return;
+    }
     const link = `${window.location.origin}/?ref=${account}`;
     navigator.clipboard.writeText(link);
     setCopiedRef(true);
@@ -160,9 +168,19 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
                     >
                       <div className="flex items-center gap-2">
                         <Share2 className="w-3.5 h-3.5 text-[#FDB813]" />
-                        <span>{copiedRef ? 'Link Copied!' : 'Copy Referral Link'}</span>
+                        <span>
+                          {!isApproved
+                            ? 'Referral Link (Locked)'
+                            : copiedRef
+                            ? 'Link Copied!'
+                            : 'Copy Referral Link'}
+                        </span>
                       </div>
-                      {copiedRef ? (
+                      {!isApproved ? (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">
+                          Locked
+                        </span>
+                      ) : copiedRef ? (
                         <Check className="w-3.5 h-3.5 text-[#10B981]" />
                       ) : (
                         <Copy className="w-3.5 h-3.5 text-[#FDB813]" />

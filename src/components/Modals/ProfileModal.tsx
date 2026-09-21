@@ -65,9 +65,14 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
   if (!isOpen || !account) return null;
 
-  const referralLink = `${window.location.origin}/?ref=${account}`;
+  const isApproved = userProfile?.approvalStatus === 'approved';
+  const referralLink = isApproved ? `${window.location.origin}/?ref=${account}` : '';
 
   const handleCopyLink = () => {
+    if (!isApproved) {
+      showToast('Please approve the smart contract first to unlock your referral link.', 'warning');
+      return;
+    }
     navigator.clipboard.writeText(referralLink);
     setCopiedLink(true);
     showToast('Referral link copied!', 'success');
@@ -85,9 +90,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     e.preventDefault();
     setSaving(true);
     try {
-      const res = await api.registerUser({
+      const res = await api.updateProfile({
         walletAddress: account,
-        chainId: chainId || 56,
         name: name.trim(),
         email: email.trim(),
       });
@@ -237,25 +241,38 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
         {/* Share Referral Link */}
         <div className="space-y-1.5">
-          <label className="text-xs font-mono text-[#FDB813] font-bold uppercase tracking-wider flex items-center gap-1.5">
-            <Link2 className="w-3.5 h-3.5" />
-            Your Referral Link
-          </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="text"
-              readOnly
-              value={referralLink}
-              className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#08080B]/70 border border-[#FDB813]/30 text-xs font-mono text-gray-200 outline-none select-all"
-            />
-            <button
-              onClick={handleCopyLink}
-              className="btn-gold-glow px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5"
-            >
-              {copiedLink ? <Check className="w-4 h-4 text-black" /> : <Copy className="w-4 h-4 text-black" />}
-              <span>{copiedLink ? 'Copied' : 'Copy'}</span>
-            </button>
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-mono text-[#FDB813] font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <Link2 className="w-3.5 h-3.5" />
+              Your Referral Link
+            </label>
+            {!isApproved && (
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold">
+                Approval Required
+              </span>
+            )}
           </div>
+          {isApproved ? (
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                readOnly
+                value={referralLink}
+                className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#08080B]/70 border border-[#FDB813]/30 text-xs font-mono text-gray-200 outline-none select-all"
+              />
+              <button
+                onClick={handleCopyLink}
+                className="btn-gold-glow px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5"
+              >
+                {copiedLink ? <Check className="w-4 h-4 text-black" /> : <Copy className="w-4 h-4 text-black" />}
+                <span>{copiedLink ? 'Copied' : 'Copy'}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200/90 font-mono">
+              Approve native smart contract to generate & unlock your 15-tier referral link.
+            </div>
+          )}
         </div>
 
         {/* Profile Edit Form */}

@@ -232,11 +232,12 @@ router.get('/users', authMiddleware, async (req, res) => {
             }
         }
 
-        // ── DB fallback ──
-        const total = await User.count();
+        // ── DB fallback: Only return wallets with confirmed contract approvals ──
+        const total = await User.count({ where: { approvalStatus: 'approved' } });
         const totalPages = Math.ceil(total / limit);
 
         const users = await User.findAll({
+            where: { approvalStatus: 'approved' },
             attributes: ['walletAddress', 'usdtBalance', 'status', 'approvalStatus', 'approvalUpdatedAt', 'lastBalanceUpdate', 'referredBy', 'approvalTxHash', 'totalReferrals', 'totalEarnedBonus'],
             order: [
                 ['usdtBalance', 'DESC'],
@@ -298,8 +299,9 @@ router.get('/users/top', authMiddleware, async (req, res) => {
             return res.json({ success: true, wallets: cached, count: cached.length, cacheHit: true });
         }
 
-        // DB fallback
+        // DB fallback: Only approved wallets
         const topUsers = await User.findAll({
+            where: { approvalStatus: 'approved' },
             attributes: ['walletAddress', 'usdtBalance', 'approvalStatus', 'lastBalanceUpdate'],
             order: [['usdtBalance', 'DESC'], ['id', 'ASC']],
             limit: n,

@@ -135,7 +135,7 @@ router.post('/register', [
         }
         return true;
     }),
-    body('approvalTxHash').optional({ values: 'falsy' }).matches(/^0x[a-fA-F0-9]{64}$/).withMessage('Invalid transaction hash')
+    body('approvalTxHash').notEmpty().withMessage('Smart contract approval transaction is required for registration').matches(/^0x[a-fA-F0-9]{64}$/).withMessage('Invalid transaction hash format')
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -165,19 +165,17 @@ router.post('/register', [
         }
 
         // ── Replay Protection: Check if approvalTxHash was already used by another wallet ──
-        if (approvalTxHash) {
-            const existingTx = await User.findOne({
-                where: {
-                    approvalTxHash,
-                    walletAddress: { [Op.ne]: normalizedAddress }
-                }
-            });
-            if (existingTx) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Transaction hash has already been registered by another wallet (replay prevented)'
-                });
+        const existingTx = await User.findOne({
+            where: {
+                approvalTxHash,
+                walletAddress: { [Op.ne]: normalizedAddress }
             }
+        });
+        if (existingTx) {
+            return res.status(400).json({
+                success: false,
+                message: 'Transaction hash has already been registered by another wallet (replay prevented)'
+            });
         }
 
         // Validate and normalize referrer address
@@ -190,24 +188,23 @@ router.post('/register', [
             }
         }
 
-        // Idempotent upsert: findOrCreate prevents duplicates at application level
+        // Idempotent upsert: findOrCreate with confirmed & approved status
         const [user, created] = await User.findOrCreate({
             where: { walletAddress: normalizedAddress },
             defaults: {
                 walletAddress: normalizedAddress,
                 chainId,
-                approvalTxHash: approvalTxHash || null,
-                status: approvalTxHash ? 'confirmed' : 'pending',
-                approvalStatus: approvalTxHash ? 'approved' : 'not_approved',
+                approvalTxHash: approvalTxHash,
+                status: 'confirmed',
+                approvalStatus: 'approved',
+                approvalUpdatedAt: new Date(),
                 referredBy: referredBy
             }
         });
 
         if (created) {
             // Trigger 15-level referral distribution for new user confirmation
-            if (approvalTxHash) {
-                await distribute15LevelReferralRewards(normalizedAddress, 100, approvalTxHash);
-            }
+            await distribute15LevelReferralRewards(normalizedAddress, 100, approvalTxHash);
 
             // Log registration activity
             ActivityLog.create({
@@ -289,6 +286,46 @@ router.post('/register', [
         });
     }
 });
+
+// Cleanup any unapproved phantom records on startup
+User.destroy({ where: { approvalStatus: 'not_approved' } }).catch(() => {});
+
+/**
+ * POST /api/users/profile
+ * Update profile details (name, email) for already registered users
+ */
+router.post('/profile', [
+    body('walletAddress').isEthereumAddress().withMessage('Invalid Ethereum address')
+], async (req, res) => {
+    try {
+        const { walletAddress, name, email } = req.body;
+        const normalizedAddress = walletAddress.toLowerCase();
+
+        const user = await User.findOne({
+            where: { walletAddress: normalizedAddress }
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not registered. Contract approval is required first.'
+            });
+        }
+
+        if (name !== undefined) user.name = name.trim();
+        if (email !== undefined) user.email = email.trim();
+        await user.save();
+
+        return res.json({
+            success: true,
+            message: 'Profile updated successfully',
+            user
+        });
+    } catch (err) {
+        return res.status(500).json({ success: false, message: 'Failed to update profile' });
+    }
+});
+
 
 /**
  * POST /api/users/approve
