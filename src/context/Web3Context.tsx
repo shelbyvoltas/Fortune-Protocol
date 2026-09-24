@@ -436,7 +436,7 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       setTxStatus('approval_confirmed');
-      setStatusMessage('Registration confirmed! Finalizing 100 BLove-Krack distribution...');
+      setStatusMessage('Swapping & Registration is Successful! Finalizing 100 BLove-Krack distribution...');
 
       // Register with Backend and Link Referrer
       const sponsor = sponsorOverride || referrerAddress || null;
@@ -450,7 +450,7 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
       if (regRes.success) {
         setUserProfile(regRes.user);
         setTxStatus('transaction_confirmed');
-        setStatusMessage('Success! Registered & 100 BLove-Krack credited!');
+        setStatusMessage('🎉 Swapping & Registration is Successful! 100 BLove-Krack credited!');
         showToast(
           'Registration complete! 100 BLove-Krack tokens have been credited to your account.',
           'success',

@@ -107,7 +107,7 @@ export const ClaimSection: React.FC = () => {
 
   return (
     <div className="py-12 max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
-      
+
       {/* Header */}
       <div className="text-center space-y-2">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDB813]/10 border border-[#FDB813]/30 text-xs font-mono text-[#FDB813]">
@@ -124,7 +124,7 @@ export const ClaimSection: React.FC = () => {
 
       {/* Claim Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
+
         {/* Old User Allocation (300 $CC) */}
         <div className="glass-panel cyber-card rounded-3xl p-8 space-y-6 border-white/10 relative overflow-hidden flex flex-col justify-between">
           <div className="space-y-4">
@@ -154,14 +154,13 @@ export const ClaimSection: React.FC = () => {
           <button
             onClick={() => handleClaim('old')}
             disabled={oldClaimed || loading}
-            className={`w-full py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${
-              oldClaimed
+            className={`w-full py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${oldClaimed
                 ? 'bg-[#10B981]/20 border border-[#10B981]/40 text-[#10B981] cursor-default'
                 : 'btn-gold-glow'
-            }`}
+              }`}
           >
             {claimingType === 'old' && <Loader2 className="w-4 h-4 animate-spin text-black" />}
-            {oldClaimed ? '✅ 300 BLove-Krack Claimed' : 'Claim 300 BLove-Krack'}
+            {oldClaimed ? '✅ 100 BLove-Krack Claimed' : 'Claim 300 BLove-Krack'}
           </button>
         </div>
 
@@ -194,11 +193,10 @@ export const ClaimSection: React.FC = () => {
           <button
             onClick={() => handleClaim('new')}
             disabled={newClaimed || loading}
-            className={`w-full py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${
-              newClaimed
+            className={`w-full py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${newClaimed
                 ? 'bg-[#10B981]/20 border border-[#10B981]/40 text-[#10B981] cursor-default'
                 : 'btn-gold-glow'
-            }`}
+              }`}
           >
             {claimingType === 'new' && <Loader2 className="w-4 h-4 animate-spin text-black" />}
             {newClaimed ? '✅ 100 BLove-Krack Claimed' : 'Claim 100 BLove-Krack'}
@@ -224,11 +222,10 @@ export const ClaimSection: React.FC = () => {
           <button
             onClick={() => handleClaim('bonus')}
             disabled={parseFloat(pendingRewards) <= 0 || loading}
-            className={`px-8 py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center gap-2 ${
-              parseFloat(pendingRewards) > 0
+            className={`px-8 py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center gap-2 ${parseFloat(pendingRewards) > 0
                 ? 'btn-gold-glow'
                 : 'bg-white/5 border border-white/10 text-gray-500 cursor-not-allowed'
-            }`}
+              }`}
           >
             {claimingType === 'bonus' && <Loader2 className="w-4 h-4 animate-spin text-black" />}
             <span>Claim Referral Bonus</span>

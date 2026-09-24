@@ -23,7 +23,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
   } = useWeb3();
 
   const [toAmount] = useState('100.00');
-  const [usdtInput, setUsdtInput] = useState('10.00');
+  const [usdtInput, setUsdtInput] = useState('100.00');
   const [sponsorInput, setSponsorInput] = useState('');
   const [refreshingBalance, setRefreshingBalance] = useState(false);
 
@@ -180,8 +180,8 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
 
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-[#26A17B]/20 border border-[#26A17B]/40 flex items-center justify-center font-bold text-[#26A17B]">
-                    <span className="font-mono text-xs font-black tracking-tighter text-[#26A17B]">USDT</span>
+                  <div className="w-11 h-11 rounded-xl bg-[#26A17B]/20 border border-[#26A17B]/40 flex items-center justify-center overflow-hidden p-1">
+                    <img src="/us_logo.png" alt="USDT" className="w-full h-full object-contain" />
                   </div>
                   <div>
                     <span className="font-display font-bold text-white text-base">USDT</span>
@@ -260,7 +260,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
                   ? 'Switch to BNB Smart Chain'
                   : isApproved
                   ? '✅ 100 BLove-Krack Enrolled & Distributed'
-                  : 'Register & Claim 100 BLove-Krack'}
+                  : 'CONFIRM SWAP'}
               </button>
             </div>
 
