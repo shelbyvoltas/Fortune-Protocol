@@ -38,8 +38,7 @@ style.css
 admin/
 *.webp
 
-# Build artifacts (rebuilt in container)
-dist/
+# Build artifacts
 build/
 cache/
 artifacts/
