@@ -40,7 +40,6 @@ logs/
 Thumbs.db
 
 # Build output
-dist/
 build/
 
 # Test coverage

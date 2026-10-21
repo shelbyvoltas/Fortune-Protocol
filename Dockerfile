@@ -1,19 +1,3 @@
-# ─── Stage 1: Build Frontend & Tooling ─────────────────────
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# Install build dependencies
-COPY package*.json ./
-RUN npm ci --legacy-peer-deps
-
-# Copy full source
-COPY . .
-
-# Build production React/Vite SPA bundle
-RUN npm run build
-
-# ─── Stage 2: Production Runtime ──────────────────────────
 FROM node:20-alpine
 
 # Create secure non-root user
@@ -21,14 +5,19 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 WORKDIR /app
 
-# Install production dependencies only
+# Set npm network resiliency against slow connection/timeouts
+RUN npm config set fetch-retries 5 && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000
+
+# Install production dependencies only (skip heavy hardhat/dev tools)
 COPY package*.json ./
 RUN npm ci --omit=dev --legacy-peer-deps && npm cache clean --force
 
-# Copy runtime assets and server code
-COPY --from=builder /app/server ./server
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/dist ./dist
+# Copy prebuilt frontend, public assets, and backend server
+COPY server ./server
+COPY public ./public
+COPY dist ./dist
 
 # Set ownership to unprivileged user
 RUN chown -R appuser:appgroup /app
@@ -41,3 +30,4 @@ EXPOSE 3000
 ENV NODE_ENV=production
 
 CMD ["node", "server/server.js"]
+
