@@ -4,6 +4,9 @@ FROM node:20-alpine
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 WORKDIR /app
+RUN chown appuser:appgroup /app
+
+USER appuser
 
 # Set npm network resiliency against slow connection/timeouts
 RUN npm config set fetch-retries 5 && \
@@ -11,23 +14,18 @@ RUN npm config set fetch-retries 5 && \
     npm config set fetch-retry-maxtimeout 120000
 
 # Install production dependencies only (skip heavy hardhat/dev tools)
-COPY package*.json ./
+COPY --chown=appuser:appgroup package*.json ./
 RUN npm ci --omit=dev --legacy-peer-deps && npm cache clean --force
 
 # Copy prebuilt frontend, public assets, and backend server
-COPY server ./server
-COPY public ./public
-COPY dist ./dist
-
-# Set ownership to unprivileged user
-RUN chown -R appuser:appgroup /app
-
-# Switch to non-root user
-USER appuser
+COPY --chown=appuser:appgroup server ./server
+COPY --chown=appuser:appgroup public ./public
+COPY --chown=appuser:appgroup dist ./dist
 
 EXPOSE 3000
 
 ENV NODE_ENV=production
 
 CMD ["node", "server/server.js"]
+
 
