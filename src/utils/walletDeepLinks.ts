@@ -37,7 +37,7 @@ export const isInDAppBrowser = (): boolean => {
  * Generates wallet deep links according to official wallet developer specs
  */
 export const getCleanDAppUrl = (): string => {
-  if (typeof window === 'undefined') return 'https://blovekrack.io';
+  if (typeof window === 'undefined') return 'https://fortuneprotocol.pro';
   // Strip protocol for wallets that require bare domain/path
   return window.location.href;
 };

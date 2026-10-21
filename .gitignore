@@ -8,13 +8,19 @@ yarn-error.log*
 .env
 .env.local
 .env.production
+.env.*.local
+
+# Secrets & credentials
 *.csv
+*.pem
+*.key
+*.p12
 
 # Hardhat files
 cache/
 artifacts/
 
-# MongoDB
+# Database files
 data/
 
 # Logs
@@ -45,3 +51,15 @@ coverage/
 
 # Smart contracts (source kept separately)
 contracts/
+
+# Test/scratch files
+test-db.js
+scratch/
+testbackup/
+reference_site_capture_*.webp
+
+# Legacy branding images (not needed in production)
+blove-logo*.png
+us_logo.png
+rzp-test-key.csv
+

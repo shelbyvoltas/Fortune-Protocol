@@ -1,7 +1,7 @@
 {
-    "name": "blove-krack",
+    "name": "fortune-protocol-g",
     "version": "1.0.0",
-    "description": "BLOVE KRACK - Next-Generation Web3 Gaming & Rewards Platform",
+    "description": "Fortune Protocol G - Next-Generation Web3 Protocol & Rewards Platform",
     "main": "server/server.js",
     "scripts": {
         "start": "node server/server.js",
@@ -25,7 +25,7 @@
         "smart-contract",
         "registration"
     ],
-    "author": "PVC Meta Team",
+    "author": "Fortune Protocol Team",
     "license": "MIT",
     "dependencies": {
         "bcryptjs": "^2.4.3",

@@ -1,4 +1,4 @@
-# Tor SOCKS5 Proxy Configuration for BLove-Krack
+# Tor SOCKS5 Proxy Configuration for Fortune Protocol G
 # Routes outbound RPC calls through rotating exit nodes
 
 # SOCKS5 listener — accessible only within Docker network

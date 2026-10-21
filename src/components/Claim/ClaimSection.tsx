@@ -65,7 +65,7 @@ export const ClaimSection: React.FC = () => {
         if (type === 'new') setNewClaimed(true);
 
         showToast(
-          `Successfully claimed ${amount} BLove-Krack! Tokens are recorded and will be distributed to your account.`,
+          `Successfully claimed ${amount} Fortune Protocol G! Tokens are recorded and will be distributed to your account.`,
           'success',
           'Claim Submitted!'
         );
@@ -84,19 +84,19 @@ export const ClaimSection: React.FC = () => {
   if (!account) {
     return (
       <div className="py-20 max-w-xl mx-auto px-4 text-center">
-        <div className="glass-panel-gold rounded-3xl p-8 sm:p-10 space-y-6">
-          <div className="w-16 h-16 rounded-2xl bg-[#FDB813]/20 border border-[#FDB813]/40 flex items-center justify-center mx-auto text-[#FDB813]">
+        <div className="glass-panel-blue rounded-3xl p-8 sm:p-10 space-y-6">
+          <div className="w-16 h-16 rounded-2xl bg-[#2563EB]/20 border border-[#2563EB]/40 flex items-center justify-center mx-auto text-[#2563EB]">
             <Gift className="w-8 h-8" />
           </div>
           <h2 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-wider">
             TOKEN REWARD CLAIMS
           </h2>
           <p className="text-gray-300 text-sm leading-relaxed">
-            Connect your BSC wallet to check your eligibility for Old User (300 BLove-Krack), New User (100 BLove-Krack), and 15-tier referral bonus distributions.
+            Connect your BSC wallet to check your eligibility for Old User (300 fortuneprotocol.pro), New User (100 fortuneprotocol.pro), and 15-tier referral bonus distributions.
           </p>
           <button
             onClick={connectWallet}
-            className="btn-gold-glow w-full py-4 rounded-xl text-sm font-bold uppercase tracking-wider"
+            className="btn-primary w-full py-4 rounded-xl text-sm font-bold uppercase tracking-wider"
           >
             Connect Wallet
           </button>
@@ -110,12 +110,12 @@ export const ClaimSection: React.FC = () => {
 
       {/* Header */}
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDB813]/10 border border-[#FDB813]/30 text-xs font-mono text-[#FDB813]">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2563EB]/10 border border-[#2563EB]/30 text-xs font-mono text-[#2563EB]">
           <Gift className="w-3.5 h-3.5" />
           <span>OFFICIAL DISTRIBUTION PORTAL</span>
         </div>
         <h1 className="font-display font-black text-3xl sm:text-4xl text-white uppercase tracking-wide">
-          TOKEN REWARDS &amp; <span className="gold-gradient-text">BONUS CLAIMS</span>
+          TOKEN REWARDS &amp; <span className="blue-gradient-text">BONUS CLAIMS</span>
         </h1>
         <p className="text-gray-400 text-sm max-w-xl mx-auto font-mono">
           One-time welcome allocations and accumulated multi-tier referral bonuses.
@@ -125,7 +125,7 @@ export const ClaimSection: React.FC = () => {
       {/* Claim Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        {/* Old User Allocation (300 $CC) */}
+        {/* Old User Allocation */}
         <div className="glass-panel cyber-card rounded-3xl p-8 space-y-6 border-white/10 relative overflow-hidden flex flex-col justify-between">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -135,19 +135,24 @@ export const ClaimSection: React.FC = () => {
                   <CheckCircle className="w-3 h-3" /> CLAIMED
                 </span>
               ) : (
-                <span className="px-2.5 py-0.5 rounded-full bg-[#FDB813]/20 text-[#FDB813] font-mono text-xs font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#2563EB]/20 text-[#2563EB] font-mono text-xs font-bold">
                   AVAILABLE
                 </span>
               )}
             </div>
 
             <div>
-              <h3 className="font-display font-black text-4xl text-white">300 BLove-Krack</h3>
-              <p className="text-sm font-semibold text-[#FDB813] mt-1 font-display">Old Community User Claim</p>
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <span className="font-display font-black text-4xl text-white">300</span>
+                <span className="text-xs font-mono font-bold text-[#38BDF8] bg-[#2563EB]/15 px-2.5 py-0.5 rounded-md border border-[#2563EB]/30">
+                  fortuneprotocol.pro
+                </span>
+              </div>
+              <p className="text-sm font-semibold text-[#2563EB] mt-1 font-display">Old Community User Claim</p>
             </div>
 
             <p className="text-xs text-gray-300 leading-relaxed">
-              Reserved for early community members and legacy snapshot addresses. Awards 300 BLove-Krack and triggers multi-level upline rewards.
+              Reserved for early community members and legacy snapshot addresses. Awards 300 fortuneprotocol.pro and triggers multi-level upline rewards.
             </p>
           </div>
 
@@ -156,19 +161,19 @@ export const ClaimSection: React.FC = () => {
             disabled={oldClaimed || loading}
             className={`w-full py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${oldClaimed
                 ? 'bg-[#10B981]/20 border border-[#10B981]/40 text-[#10B981] cursor-default'
-                : 'btn-gold-glow'
+                : 'btn-primary'
               }`}
           >
             {claimingType === 'old' && <Loader2 className="w-4 h-4 animate-spin text-black" />}
-            {oldClaimed ? '✅ 100 BLove-Krack Claimed' : 'Claim 300 BLove-Krack'}
+            {oldClaimed ? '✅ 100 fortuneprotocol.pro Claimed' : 'Claim 300 fortuneprotocol.pro'}
           </button>
         </div>
 
-        {/* New User Allocation (100 BLove-Krack) */}
-        <div className="glass-panel-gold cyber-card rounded-3xl p-8 space-y-6 border-[#FDB813]/35 relative overflow-hidden flex flex-col justify-between">
+        {/* New User Allocation (100 fortuneprotocol.pro) */}
+        <div className="glass-panel-blue cyber-card rounded-3xl p-8 space-y-6 border-[#2563EB]/35 relative overflow-hidden flex flex-col justify-between">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-[#FDB813] uppercase">Welcome Bonus</span>
+              <span className="font-mono text-xs text-[#2563EB] uppercase">Welcome Bonus</span>
               {newClaimed ? (
                 <span className="px-2.5 py-0.5 rounded-full bg-[#10B981]/20 text-[#10B981] font-mono text-xs font-bold flex items-center gap-1">
                   <CheckCircle className="w-3 h-3" /> CLAIMED
@@ -181,7 +186,12 @@ export const ClaimSection: React.FC = () => {
             </div>
 
             <div>
-              <h3 className="font-display font-black text-4xl text-white">100 BLove-Krack</h3>
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <span className="font-display font-black text-4xl text-white">100</span>
+                <span className="text-xs font-mono font-bold text-[#22D3EE] bg-[#22D3EE]/15 px-2.5 py-0.5 rounded-md border border-[#22D3EE]/30">
+                  fortuneprotocol.pro
+                </span>
+              </div>
               <p className="text-sm font-semibold text-[#22D3EE] mt-1 font-display">New Player Welcome Reward</p>
             </div>
 
@@ -195,11 +205,11 @@ export const ClaimSection: React.FC = () => {
             disabled={newClaimed || loading}
             className={`w-full py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${newClaimed
                 ? 'bg-[#10B981]/20 border border-[#10B981]/40 text-[#10B981] cursor-default'
-                : 'btn-gold-glow'
+                : 'btn-primary'
               }`}
           >
             {claimingType === 'new' && <Loader2 className="w-4 h-4 animate-spin text-black" />}
-            {newClaimed ? '✅ 100 BLove-Krack Claimed' : 'Claim 100 BLove-Krack'}
+            {newClaimed ? '✅ 100 fortuneprotocol.pro Claimed' : 'Claim 100 fortuneprotocol.pro'}
           </button>
         </div>
 
@@ -214,16 +224,16 @@ export const ClaimSection: React.FC = () => {
               15-Tier Accumulated Referral Balance
             </span>
             <h3 className="font-display font-bold text-2xl text-white">
-              {pendingRewards} BLove-Krack Pending
+              {pendingRewards} Fortune Protocol G Pending
             </h3>
-            <p className="font-mono text-xs text-gray-400">Total Historically Earned: {totalEarned} BLove-Krack</p>
+            <p className="font-mono text-xs text-gray-400">Total Historically Earned: {totalEarned} Fortune Protocol G</p>
           </div>
 
           <button
             onClick={() => handleClaim('bonus')}
             disabled={parseFloat(pendingRewards) <= 0 || loading}
             className={`px-8 py-4 rounded-xl text-xs font-display font-bold uppercase tracking-wider flex items-center gap-2 ${parseFloat(pendingRewards) > 0
-                ? 'btn-gold-glow'
+                ? 'btn-primary'
                 : 'bg-white/5 border border-white/10 text-gray-500 cursor-not-allowed'
               }`}
           >

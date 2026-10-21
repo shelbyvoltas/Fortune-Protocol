@@ -8,10 +8,9 @@ interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   onOpenProfile: () => void;
-  onOpenAdmin: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenProfile, onOpenAdmin }) => {
+export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenProfile }) => {
   const { account, chainId, isCorrectNetwork, connectWallet, disconnectWallet, switchNetwork, userProfile } = useWeb3();
   const { showToast } = useNotification();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -45,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
   ];
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-40 bg-[#08080B]/90 backdrop-blur-xl border-b border-[#FDB813]/20 transition-all duration-300">
+    <nav className="fixed top-0 left-0 w-full z-40 bg-[#060D19]/90 backdrop-blur-xl border-b border-[#2563EB]/20 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
@@ -56,22 +55,21 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
           >
             <div className="relative w-11 h-11 flex-shrink-0">
               <img 
-                src="/blove-logo.png" 
-                alt="BLOVE KRACK" 
-                className="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(253,184,19,0.5)] group-hover:scale-105 transition-transform"
+                src="/logo.png" 
+                alt="Fortune Protocol G" 
+                className="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(37,99,235,0.6)] group-hover:scale-105 transition-transform"
                 onError={(e) => {
-                  // Fallback if image path not yet loaded
                   (e.target as HTMLElement).style.display = 'none';
                 }}
               />
             </div>
             <div className="flex flex-col">
               <span className="font-display font-black text-xl tracking-wider text-white flex items-center gap-1.5">
-                BLOVE <span className="gold-gradient-text">KRACK</span>
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#FDB813] animate-ping" />
+                Fortune <span className="blue-gradient-text">Protocol G</span>
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#38BDF8] animate-ping" />
               </span>
               <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[#94A3B8]">
-                Play • Compete • Earn
+                Earn • Grow • Prosper
               </span>
             </div>
           </div>
@@ -84,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
                 onClick={() => setActiveTab(item.id)}
                 className={`px-3.5 py-2 rounded-lg text-xs font-display font-semibold uppercase tracking-wider transition-all duration-200 ${
                   activeTab === item.id
-                    ? 'text-[#FDB813] bg-[#FDB813]/10 border border-[#FDB813]/30 shadow-[0_0_15px_rgba(253,184,19,0.15)]'
+                    ? 'text-[#38BDF8] bg-[#2563EB]/10 border border-[#2563EB]/30 shadow-[0_0_15px_rgba(37,99,235,0.15)]'
                     : 'text-gray-300 hover:text-white hover:bg-white/5'
                 }`}
               >
@@ -106,6 +104,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
                 <span>Switch to BSC</span>
               </button>
             )}
+
+
 
             {/* Wallet Button */}
             {!account ? (
@@ -145,8 +145,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
                     <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981]" />
                     <span className="font-mono text-gray-200 font-medium">{formattedAddress}</span>
                     {userProfile?.approvalStatus === 'approved' && (
-                      <span className="px-1.5 py-0.5 rounded text-[10px] bg-[#10B981]/20 text-[#10B981] font-semibold">
-                        100 BLove-Krack
+                      <span className="px-1.5 py-0.5 rounded text-[10px] bg-[#22C55E]/20 text-[#22C55E] font-semibold">
+                        100 FPG
                       </span>
                     )}
                     <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
@@ -156,9 +156,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
                 {/* Dropdown Menu */}
                 {walletDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 rounded-xl glass-panel-gold p-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2">
-                    <div className="px-3 py-2 border-b border-[#FDB813]/20 mb-1">
+                    <div className="px-3 py-2 border-b border-[#2563EB]/20 mb-1">
                       <p className="text-[10px] uppercase font-mono text-gray-400">Connected Wallet</p>
-                      <p className="font-mono text-xs text-[#FDB813] font-semibold truncate">{account}</p>
+                      <p className="font-mono text-xs text-[#38BDF8] font-semibold truncate">{account}</p>
                     </div>
 
                     {/* Instant 1-tap Copy Referral */}
@@ -209,6 +209,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
                       <span>15-Level Referral Tree</span>
                     </button>
 
+
+
                     <div className="border-t border-[#FDB813]/20 my-1 pt-1">
                       <button
                         onClick={() => {
@@ -258,7 +260,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#0B0B0E]/95 backdrop-blur-2xl border-b border-[#FDB813]/20 px-4 pt-2 pb-6 space-y-2">
+        <div className="md:hidden bg-[#060D19]/95 backdrop-blur-2xl border-b border-[#2563EB]/20 px-4 pt-2 pb-6 space-y-2">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -268,7 +270,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
               }}
               className={`w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold uppercase tracking-wider ${
                 activeTab === item.id
-                  ? 'bg-[#FDB813]/15 text-[#FDB813] border border-[#FDB813]/30'
+                  ? 'bg-[#2563EB]/15 text-[#38BDF8] border border-[#2563EB]/30'
                   : 'text-gray-300 hover:bg-white/5'
               }`}
             >
@@ -276,22 +278,22 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
             </button>
           ))}
 
-          <div className="pt-3 border-t border-[#FDB813]/20 flex flex-col gap-2.5">
+          <div className="pt-3 border-t border-[#2563EB]/20 flex flex-col gap-2.5">
             {account ? (
               <>
                 {/* Prominent Copy Referral Link Button in Mobile Burger Drawer */}
                 <button
                   onClick={handleCopyReferral}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-[#FDB813]/20 to-[#FDB813]/10 border border-[#FDB813]/40 text-xs font-semibold text-[#FFE066] hover:bg-[#FDB813]/25 transition-all shadow-[0_0_15px_rgba(253,184,19,0.15)]"
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-gradient-to-r from-[#2563EB]/20 to-[#38BDF8]/10 border border-[#2563EB]/40 text-xs font-semibold text-[#60A5FA] hover:bg-[#2563EB]/25 transition-all shadow-[0_0_15px_rgba(37,99,235,0.15)]"
                 >
                   <div className="flex items-center gap-2.5">
-                    <Share2 className="w-4 h-4 text-[#FDB813]" />
+                    <Share2 className="w-4 h-4 text-[#38BDF8]" />
                     <span>{copiedRef ? 'Referral Link Copied!' : 'Copy My Referral Link'}</span>
                   </div>
                   {copiedRef ? (
                     <Check className="w-4 h-4 text-[#10B981]" />
                   ) : (
-                    <Copy className="w-4 h-4 text-[#FDB813]" />
+                    <Copy className="w-4 h-4 text-[#38BDF8]" />
                   )}
                 </button>
 
@@ -302,9 +304,10 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenP
                   }}
                   className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg glass-panel text-xs font-semibold text-gray-200"
                 >
-                  <UserCheck className="w-4 h-4 text-[#FDB813]" />
+                  <UserCheck className="w-4 h-4 text-[#38BDF8]" />
                   <span>View Profile & Referrals</span>
                 </button>
+
                 <button
                   onClick={() => {
                     disconnectWallet();

@@ -14,7 +14,7 @@ async function run() {
         await client.connect();
         console.log('[DB] Connected to postgres (default DB)');
 
-        const dbName = process.env.DB_NAME || 'BLove-Krack';
+        const dbName = process.env.DB_NAME || 'fortune_protocol_g';
 
         // Check if DB exists
         const res = await client.query(

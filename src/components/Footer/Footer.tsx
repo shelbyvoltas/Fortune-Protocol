@@ -4,10 +4,9 @@ import { BRAND } from '../../config/constants';
 
 interface FooterProps {
   onNavClick: (tab: string) => void;
-  onOpenAdmin: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavClick }) => {
   const footerLinks = [
     { label: 'About', id: 'home' },
     { label: 'Roadmap', id: 'home' },
@@ -19,10 +18,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
   ];
 
   return (
-    <footer className="relative bg-[#060608] border-t border-[#FDB813]/20 pt-16 pb-12 overflow-hidden">
+    <footer className="relative bg-[#060608] border-t border-[#2563EB]/20 pt-16 pb-12 overflow-hidden">
 
       {/* Background Ambient Glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[200px] bg-[#FDB813]/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[200px] bg-[#2563EB]/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -33,15 +32,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
           <div className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => onNavClick('home')}>
             <div className="flex items-center gap-3">
               <img
-                src="/blove-logo.png"
-                alt="BLOVE KRACK"
-                className="w-12 h-12 object-contain drop-shadow-[0_0_12px_rgba(253,184,19,0.5)]"
+                src="/fortune-logo.png"
+                alt="FORTUNE PROTOCOL G"
+                className="w-12 h-12 object-contain drop-shadow-[0_0_12px_rgba(37, 99, 235,0.5)]"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = 'none';
                 }}
               />
               <span className="font-display font-black text-2xl text-white tracking-wider">
-                BLOVE <span className="gold-gradient-text">KRACK</span>
+                FORTUNE <span className="blue-gradient-text">PROTOCOL G</span>
               </span>
             </div>
             <p className="font-mono text-xs text-gray-400 uppercase tracking-[0.25em]">
@@ -55,9 +54,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
               <React.Fragment key={link.label}>
                 <button
                   onClick={() => {
-                    if (link.id) onNavClick(link.id);
+                    if (link.id) {
+                      onNavClick(link.id);
+                    }
                   }}
-                  className="hover:text-[#FDB813] transition-colors"
+                  className="hover:text-[#2563EB] transition-colors"
                 >
                   {link.label}
                 </button>
@@ -72,7 +73,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
               href={BRAND.telegramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#FDB813]/20 border border-white/10 hover:border-[#FDB813]/40 flex items-center justify-center text-gray-300 hover:text-[#FDB813] transition-all"
+              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#2563EB]/20 border border-white/10 hover:border-[#2563EB]/40 flex items-center justify-center text-gray-300 hover:text-[#2563EB] transition-all"
               title="Telegram"
             >
               <Send className="w-4 h-4" />
@@ -83,7 +84,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
               href={BRAND.twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#FDB813]/20 border border-white/10 hover:border-[#FDB813]/40 flex items-center justify-center text-gray-300 hover:text-[#FDB813] transition-all"
+              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#2563EB]/20 border border-white/10 hover:border-[#2563EB]/40 flex items-center justify-center text-gray-300 hover:text-[#2563EB] transition-all"
               title="X (Twitter)"
             >
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -96,7 +97,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
               href={BRAND.youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#FDB813]/20 border border-white/10 hover:border-[#FDB813]/40 flex items-center justify-center text-gray-300 hover:text-[#FDB813] transition-all"
+              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#2563EB]/20 border border-white/10 hover:border-[#2563EB]/40 flex items-center justify-center text-gray-300 hover:text-[#2563EB] transition-all"
               title="YouTube"
             >
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -109,7 +110,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
               href={BRAND.discordUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#FDB813]/20 border border-white/10 hover:border-[#FDB813]/40 flex items-center justify-center text-gray-300 hover:text-[#FDB813] transition-all"
+              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#2563EB]/20 border border-white/10 hover:border-[#2563EB]/40 flex items-center justify-center text-gray-300 hover:text-[#2563EB] transition-all"
               title="Discord"
             >
               <MessageSquare className="w-4 h-4" />
@@ -119,7 +120,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
               href={BRAND.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#FDB813]/20 border border-white/10 hover:border-[#FDB813]/40 flex items-center justify-center text-gray-300 hover:text-[#FDB813] transition-all"
+              className="w-10 h-10 rounded-xl bg-white/5 hover:bg-[#2563EB]/20 border border-white/10 hover:border-[#2563EB]/40 flex items-center justify-center text-gray-300 hover:text-[#2563EB] transition-all"
               title="Share"
             >
               <Share2 className="w-4 h-4" />
@@ -128,7 +129,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
 
           {/* Slogan */}
           <div className="pt-2">
-            <span className="font-display italic font-bold text-lg text-[#FDB813] drop-shadow-[0_0_10px_rgba(253,184,19,0.4)]">
+            <span className="font-display italic font-bold text-lg text-[#2563EB] drop-shadow-[0_0_10px_rgba(37, 99, 235,0.4)]">
               Same Vision Stronger Together!
             </span>
           </div>
@@ -136,15 +137,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavClick, onOpenAdmin }) => {
           {/* Bottom Bar — Branding */}
           <div className="w-full pt-8 border-t border-white/10 flex flex-col items-center gap-2 text-xs font-mono text-gray-400">
             <div className="flex items-center justify-between w-full flex-wrap gap-2">
-              <div>© 2026 BLOVE KRACK. All Rights Reserved.</div>
+              <div>© 2026 FORTUNE PROTOCOL G. All Rights Reserved.</div>
               <div className="flex items-center gap-1.5 text-gray-300">
                 <span></span>
-                <span className="text-[#FDB813] font-semibold"></span>
-                <Lightbulb className="w-3.5 h-3.5 text-[#FDB813]" />
+                <span className="text-[#2563EB] font-semibold"></span>
+                <Lightbulb className="w-3.5 h-3.5 text-[#2563EB]" />
               </div>
             </div>
             <div className="text-gray-500 text-[11px]">
-              Made with <span className="text-red-400">❤</span> by <span className="text-[#FDB813] font-semibold">Krack</span>
+              Made with <span className="text-red-400">❤</span> by <span className="text-[#2563EB] font-semibold">PROTOCOL G</span>
             </div>
           </div>
 

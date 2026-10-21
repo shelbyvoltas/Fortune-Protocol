@@ -12,7 +12,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 // Initialize Sequelize
 // Make sure to create the database first in PostgreSQL
 const sequelize = new Sequelize(
-    process.env.DB_NAME || 'BLove-Krack',
+    process.env.DB_NAME || 'fortune_protocol_g',
     process.env.DB_USER || 'postgres',
     process.env.DB_PASS,  // No fallback — must be set in .env
     {

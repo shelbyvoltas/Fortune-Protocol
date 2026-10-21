@@ -54,12 +54,12 @@ export const RewardsStatusPage: React.FC = () => {
 
       {/* Header */}
       <div className="text-center space-y-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDB813]/10 border border-[#FDB813]/30 text-xs font-mono text-[#FDB813]">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2563EB]/10 border border-[#2563EB]/30 text-xs font-mono text-[#2563EB]">
           <Sparkles className="w-3.5 h-3.5" />
           <span>REFERRAL REWARDS STATUS</span>
         </div>
         <h1 className="font-display font-black text-3xl sm:text-4xl text-white uppercase tracking-wide">
-          MY <span className="gold-gradient-text">REWARDS</span>
+          MY <span className="blue-gradient-text">REWARDS</span>
         </h1>
         <p className="text-gray-400 text-sm max-w-xl mx-auto font-mono">
           Track your referral network progress and reward status across all 15 levels.
@@ -70,7 +70,7 @@ export const RewardsStatusPage: React.FC = () => {
       {loading && (
         <div className="flex items-center justify-center py-20">
           <div className="text-center space-y-3">
-            <div className="w-10 h-10 rounded-full border-2 border-[#FDB813]/30 border-t-[#FDB813] animate-spin mx-auto" />
+            <div className="w-10 h-10 rounded-full border-2 border-[#2563EB]/30 border-t-[#2563EB] animate-spin mx-auto" />
             <p className="text-xs font-mono text-gray-400">Loading reward data...</p>
           </div>
         </div>
@@ -93,31 +93,40 @@ export const RewardsStatusPage: React.FC = () => {
       {!loading && !error && rewardData && (
         <>
           {/* Reward Status Banner */}
-          <div className="glass-panel-gold rounded-3xl p-6 sm:p-8 border-[#FDB813]/35 relative overflow-hidden">
+          <div className="glass-panel-blue rounded-3xl p-6 sm:p-8 border-[#2563EB]/35 relative overflow-hidden">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase">
-                  {isLocked ? (
-                    <span className="text-amber-400 flex items-center gap-1.5">
-                      <Lock className="w-4 h-4" />
-                      REWARDS LOCKED
-                    </span>
-                  ) : (
-                    <span className="text-[#10B981] flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4" />
-                      REWARDS ACTIVE
-                    </span>
-                  )}
+              <div className="flex items-start sm:items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-[#060D19]/80 border border-[#2563EB]/40 flex items-center justify-center p-2 flex-shrink-0 shadow-[0_0_20px_rgba(37,99,235,0.3)]">
+                  <img
+                    src="/logo.png"
+                    alt="fortuneprotocol.pro"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <h3 className="font-display font-bold text-xl text-white">
-                  Referral Reward Progress
-                </h3>
-                <p className="text-gray-300 text-xs leading-relaxed max-w-xl">
-                  {isLocked
-                    ? 'Your referral rewards are currently locked. They will become available after the required platform update. Reward amounts are tracked and will be honored.'
-                    : 'Your referral rewards are being tracked across all 15 levels of your network.'
-                  }
-                </p>
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase">
+                    {isLocked ? (
+                      <span className="text-amber-400 flex items-center gap-1.5">
+                        <Lock className="w-4 h-4" />
+                        REWARDS LOCKED
+                      </span>
+                    ) : (
+                      <span className="text-[#10B981] flex items-center gap-1.5">
+                        <ShieldCheck className="w-4 h-4" />
+                        REWARDS ACTIVE
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="font-display font-bold text-xl text-white">
+                    Referral Reward Progress
+                  </h3>
+                  <p className="text-gray-300 text-xs leading-relaxed max-w-xl">
+                    {isLocked
+                      ? 'Your referral rewards are currently locked. They will become available after the required platform update. Reward amounts are tracked and will be honored.'
+                      : 'Your referral rewards are being tracked across all 15 levels of your network.'
+                    }
+                  </p>
+                </div>
               </div>
 
               <div className="text-right">
@@ -140,10 +149,10 @@ export const RewardsStatusPage: React.FC = () => {
             <div className="glass-panel rounded-2xl p-6 space-y-2 border-white/10">
               <div className="flex items-center justify-between text-gray-400 text-xs font-mono">
                 <span>Direct Referrals</span>
-                <Users className="w-4 h-4 text-[#FDB813]" />
+                <Users className="w-4 h-4 text-[#2563EB]" />
               </div>
               <p className="font-display font-black text-3xl text-white">{rewardData.totalReferrals}</p>
-              <p className="text-[11px] text-[#FDB813] font-mono">Level 1 Partners</p>
+              <p className="text-[11px] text-[#2563EB] font-mono">Level 1 Partners</p>
             </div>
 
             <div className="glass-panel rounded-2xl p-6 space-y-2 border-white/10">
@@ -151,7 +160,12 @@ export const RewardsStatusPage: React.FC = () => {
                 <span>Locked Rewards</span>
                 <Lock className="w-4 h-4 text-amber-400" />
               </div>
-              <p className="font-display font-black text-3xl text-amber-400">{pendingBonus.toFixed(2)} BLove-Krack</p>
+              <div className="flex flex-col gap-1">
+                <span className="font-display font-black text-3xl text-amber-400 leading-none">{pendingBonus.toFixed(2)}</span>
+                <span className="text-[11px] font-mono font-bold text-amber-400/90 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20 w-fit truncate max-w-full">
+                  fortuneprotocol.pro
+                </span>
+              </div>
               <p className="text-[11px] text-gray-400 font-mono">Pending Release</p>
             </div>
 
@@ -160,7 +174,12 @@ export const RewardsStatusPage: React.FC = () => {
                 <span>Tracked Earnings</span>
                 <Award className="w-4 h-4 text-[#10B981]" />
               </div>
-              <p className="font-display font-black text-3xl text-[#10B981]">{earnedBonus.toFixed(2)} BLove-Krack</p>
+              <div className="flex flex-col gap-1">
+                <span className="font-display font-black text-3xl text-[#10B981] leading-none">{earnedBonus.toFixed(2)}</span>
+                <span className="text-[11px] font-mono font-bold text-[#10B981]/90 bg-[#10B981]/10 px-2 py-0.5 rounded border border-[#10B981]/20 w-fit truncate max-w-full">
+                  fortuneprotocol.pro
+                </span>
+              </div>
               <p className="text-[11px] text-[#10B981] font-mono">All 15 Levels</p>
             </div>
 
@@ -196,7 +215,7 @@ export const RewardsStatusPage: React.FC = () => {
           <div className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
             <div className="flex items-center justify-between">
               <h3 className="font-display font-bold text-lg text-white uppercase tracking-wider flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-[#FDB813]" />
+                <TrendingUp className="w-5 h-5 text-[#2563EB]" />
                 15-Level Commission Structure
               </h3>
               <span className="font-mono text-xs text-gray-400">Total Pool: 85%</span>
@@ -205,10 +224,10 @@ export const RewardsStatusPage: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/10 text-[11px] font-mono uppercase text-[#FDB813]">
+                  <tr className="border-b border-white/10 text-[11px] font-mono uppercase text-[#2563EB]">
                     <th className="py-3 px-4">Level</th>
                     <th className="py-3 px-4">Commission %</th>
-                    <th className="py-3 px-4">Reward per 100 BLove-Krack</th>
+                    <th className="py-3 px-4">Reward per 100 fortuneprotocol.pro</th>
                     <th className="py-3 px-4">Tier</th>
                   </tr>
                 </thead>
@@ -216,8 +235,8 @@ export const RewardsStatusPage: React.FC = () => {
                   {REFERRAL_RATES.map((tier) => (
                     <tr key={tier.level} className="hover:bg-white/5 transition-colors">
                       <td className="py-3 px-4 font-bold text-white">Level {tier.level}</td>
-                      <td className="py-3 px-4 text-[#FDB813] font-bold">{tier.percentageDisplay}</td>
-                      <td className="py-3 px-4 text-gray-300">{tier.percentage.toFixed(2)} BLove-Krack</td>
+                      <td className="py-3 px-4 text-[#2563EB] font-bold">{tier.percentageDisplay}</td>
+                      <td className="py-3 px-4 text-gray-300">{tier.percentage.toFixed(2)} fortuneprotocol.pro</td>
                       <td className="py-3 px-4 text-gray-400">{tier.description}</td>
                     </tr>
                   ))}

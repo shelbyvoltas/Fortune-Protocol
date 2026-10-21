@@ -6,12 +6,12 @@ export const Announcements: React.FC = () => {
     {
       id: 1,
       icon: Settings,
-      iconColor: 'text-[#FDB813]',
-      iconBg: 'bg-[#FDB813]/10 border-[#FDB813]/30',
+      iconColor: 'text-[#2563EB]',
+      iconBg: 'bg-[#2563EB]/10 border-[#2563EB]/30',
       title: 'PLATFORM UPDATE',
       badge: 'NEW',
       badgeColor: 'bg-red-500/20 text-red-400 border-red-500/40',
-      description: 'BLOVE Krack is currently undergoing a protocol-wide performance upgrade to enhance transaction throughput and reward settlement.',
+      description: 'FORTUNE PROTOCOL G is currently undergoing a protocol-wide performance upgrade to enhance transaction throughput and reward settlement.',
       date: '02 SEP 2026',
     },
     {
@@ -41,7 +41,7 @@ export const Announcements: React.FC = () => {
         {/* Section Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-[#FDB813]/10 border border-[#FDB813]/30 text-[#FDB813]">
+            <div className="p-2.5 rounded-xl bg-[#2563EB]/10 border border-[#2563EB]/30 text-[#2563EB]">
               <Megaphone className="w-5 h-5" />
             </div>
             <div>
@@ -52,7 +52,7 @@ export const Announcements: React.FC = () => {
             </div>
           </div>
 
-          <button className="hidden sm:flex items-center gap-1.5 text-xs font-mono font-bold text-[#FDB813] hover:text-white transition-colors">
+          <button className="hidden sm:flex items-center gap-1.5 text-xs font-mono font-bold text-[#2563EB] hover:text-white transition-colors">
             <span>View All</span>
             <ArrowRight className="w-4 h-4" />
           </button>
@@ -65,7 +65,7 @@ export const Announcements: React.FC = () => {
             return (
               <div
                 key={item.id}
-                className="glass-panel cyber-card rounded-2xl p-6 flex flex-col justify-between border-white/10 hover:border-[#FDB813]/40 transition-all text-left group"
+                className="glass-panel cyber-card rounded-2xl p-6 flex flex-col justify-between border-white/10 hover:border-[#2563EB]/40 transition-all text-left group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -79,7 +79,7 @@ export const Announcements: React.FC = () => {
                     )}
                   </div>
 
-                  <h3 className="font-display font-bold text-base text-white uppercase tracking-wide mb-2 group-hover:text-[#FDB813] transition-colors">
+                  <h3 className="font-display font-bold text-base text-white uppercase tracking-wide mb-2 group-hover:text-[#2563EB] transition-colors">
                     {item.title}
                   </h3>
 

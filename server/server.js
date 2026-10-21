@@ -91,6 +91,11 @@ app.use(cors({
             return callback(null, true);
         }
 
+        // Allow local development origins (localhost, 127.0.0.1) on any port
+        if (process.env.NODE_ENV !== 'production' && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+            return callback(null, true);
+        }
+
         // Block all other origins
         return callback(null, false);
     },
@@ -221,8 +226,8 @@ if (fs.existsSync(distDir)) {
     }));
 }
 
-// Serve SPA Entry point
-app.get(['/', '/index.html', '/swap', '/referral', '/claim', '/ref/:address'], (req, res) => {
+// Serve SPA Entry point (including React Admin Panel)
+app.get(['/', '/index.html', '/swap', '/referral', '/claim', '/admin', '/ref/:address'], (req, res) => {
     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     const indexPath = fs.existsSync(path.join(distDir, 'index.html'))
         ? path.join(distDir, 'index.html')
@@ -230,8 +235,8 @@ app.get(['/', '/index.html', '/swap', '/referral', '/claim', '/ref/:address'], (
     res.sendFile(indexPath);
 });
 
-// Block /admin routes — legacy HTML admin files removed for security
-app.use('/admin', (req, res) => {
+// Block legacy static admin HTML/PHP files if requested directly
+app.use(['/admin.html', '/admin.php'], (req, res) => {
     res.status(403).json({ success: false, message: 'Forbidden' });
 });
 

@@ -28,32 +28,67 @@ export const AppContent: React.FC = () => {
   const [guideOpen, setGuideOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(() => {
-    return window.location.pathname.startsWith('/admin') || new URLSearchParams(window.location.search).has('admin');
+    return (
+      window.location.pathname.startsWith('/admin') ||
+      new URLSearchParams(window.location.search).has('admin') ||
+      window.location.hash === '#admin'
+    );
   });
+
+  React.useEffect(() => {
+    const handleUrlChange = () => {
+      const isAdminUrl =
+        window.location.pathname.startsWith('/admin') ||
+        new URLSearchParams(window.location.search).has('admin') ||
+        window.location.hash === '#admin';
+      if (isAdminUrl) {
+        setAdminOpen(true);
+      }
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
+
+  const handleOpenAdmin = () => {
+    setAdminOpen(true);
+    if (!window.location.pathname.startsWith('/admin')) {
+      window.history.pushState(null, '', '/admin');
+    }
+  };
+
+  const handleCloseAdmin = () => {
+    setAdminOpen(false);
+    if (window.location.pathname.startsWith('/admin') || window.location.hash === '#admin' || window.location.search.includes('admin')) {
+      window.history.pushState(null, '', '/');
+    }
+  };
 
   // ── Admin Panel Overlay (can open even before wallet is connected) ──
   if (adminOpen) {
     return (
       <Suspense fallback={<PageFallback />}>
-        <AdminPanel onClose={() => setAdminOpen(false)} />
+        <AdminPanel onClose={handleCloseAdmin} />
       </Suspense>
     );
   }
 
   // ── Wallet Gate: Show IntroPage if not connected or wrong network ──
   if (!account || !isCorrectNetwork) {
-    return <IntroPage onOpenAdmin={() => setAdminOpen(true)} />;
+    return <IntroPage />;
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-between relative bg-[#08080B] text-[#E3E2E8]">
+    <div className="min-h-screen flex flex-col justify-between relative bg-[#060D19] text-[#E3E2E8]">
       
       {/* Top Navbar */}
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenProfile={() => setProfileOpen(true)}
-        onOpenAdmin={() => setAdminOpen(true)}
       />
 
       {/* Main Routed Content */}
@@ -78,7 +113,6 @@ export const AppContent: React.FC = () => {
           setActiveTab(tab);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
-        onOpenAdmin={() => setAdminOpen(true)}
       />
 
       {/* Modals & Overlays */}

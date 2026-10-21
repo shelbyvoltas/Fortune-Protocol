@@ -2,7 +2,7 @@ services:
   # NGINX Reverse Proxy
   nginx:
     image: nginx:alpine
-    container_name: blk-nginx
+    container_name: fpg-nginx
     restart: always
     ports:
       - "8081:80"
@@ -12,17 +12,17 @@ services:
     depends_on:
       - backend
     networks:
-      - blk-network
+      - fpg-network
 
   # Tor SOCKS5 Proxy (outbound IP rotation for RPC calls)
   tor:
     build: ./tor
-    container_name: blk-tor
+    container_name: fpg-tor
     restart: always
     volumes:
       - ./tor/torrc:/etc/tor/torrc:ro
     networks:
-      - blk-network
+      - fpg-network
     healthcheck:
       test: ["CMD-SHELL", "nc -z 127.0.0.1 9050 || exit 1"]
       interval: 5s
@@ -34,15 +34,15 @@ services:
   # Redis Cache (internal + localhost:6381)
   redis:
     image: redis:7-alpine
-    container_name: blk-redis
+    container_name: fpg-redis
     restart: always
     ports:
       - "127.0.0.1:6381:6379"
     command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru --requirepass ${REDIS_PASSWORD:-changeme_redis}
     volumes:
-      - blk_redis_data:/data
+      - fpg_redis_data:/data
     networks:
-      - blk-network
+      - fpg-network
     healthcheck:
       test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-changeme_redis}", "ping" ]
       interval: 5s
@@ -52,7 +52,7 @@ services:
   # Backend API (internal + localhost:3002)
   backend:
     build: .
-    container_name: blk-backend
+    container_name: fpg-backend
     restart: always
     ports:
       - "127.0.0.1:3002:3000"
@@ -60,7 +60,7 @@ services:
       - PORT=3000
       - NODE_ENV=production
       - DB_HOST=pgbouncer
-      - DB_NAME=${DB_NAME:-BLove-Krack}
+      - DB_NAME=${DB_NAME:-fortune_protocol_g}
       - DB_USER=${DB_USER:-postgres}
       - DB_PASS=${DB_PASS}
       - DB_PORT=5432
@@ -90,17 +90,17 @@ services:
       tor:
         condition: service_healthy
     networks:
-      - blk-network
+      - fpg-network
 
   # PgBouncer Connection Pooler (internal + localhost:6434)
   pgbouncer:
     image: edoburu/pgbouncer:latest
-    container_name: blk-pgbouncer
+    container_name: fpg-pgbouncer
     restart: always
     ports:
       - "127.0.0.1:6434:5432"
     environment:
-      - DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASS}@postgres:5432/${DB_NAME:-BLove-Krack}
+      - DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASS}@postgres:5432/${DB_NAME:-fortune_protocol_g}
       - POOL_MODE=session
       - MAX_CLIENT_CONN=200
       - DEFAULT_POOL_SIZE=25
@@ -116,24 +116,24 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - blk-network
+      - fpg-network
 
   # PostgreSQL Database (internal + localhost:5434)
   postgres:
     image: postgres:15-alpine
-    container_name: blk-postgres
+    container_name: fpg-postgres
     restart: always
     ports:
       - "127.0.0.1:5434:5432"
     environment:
-      - POSTGRES_DB=${DB_NAME:-BLove-Krack}
+      - POSTGRES_DB=${DB_NAME:-fortune_protocol_g}
       - POSTGRES_USER=${DB_USER:-postgres}
       - POSTGRES_PASSWORD=${DB_PASS}
     volumes:
-      - blk_postgres_data:/var/lib/postgresql/data
+      - fpg_postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
-      - blk-network
+      - fpg-network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}" ]
       interval: 5s
@@ -141,9 +141,9 @@ services:
       retries: 5
 
 networks:
-  blk-network:
+  fpg-network:
     driver: bridge
 
 volumes:
-  blk_postgres_data:
-  blk_redis_data:
+  fpg_postgres_data:
+  fpg_redis_data:

@@ -116,12 +116,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
-      <div className="glass-panel-gold rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 relative border-[#FDB813]/40 shadow-2xl">
+      <div className="glass-panel-blue rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 space-y-5 relative border-[#2563EB]/40 shadow-2xl">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#FDB813]/20">
+        <div className="flex items-center justify-between pb-4 border-b border-[#2563EB]/20">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-[#FDB813]/20 text-[#FDB813]">
+            <div className="p-2 rounded-xl bg-[#2563EB]/20 text-[#2563EB]">
               <User className="w-5 h-5" />
             </div>
             <div>
@@ -141,7 +141,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         <div className="p-4 rounded-2xl bg-[#08080B]/70 border border-white/10 space-y-2">
           <div className="flex items-center justify-between text-xs font-mono text-gray-400">
             <span className="flex items-center gap-1.5">
-              <Wallet className="w-3.5 h-3.5 text-[#FDB813]" />
+              <Wallet className="w-3.5 h-3.5 text-[#2563EB]" />
               Wallet Address
             </span>
             {userProfile?.approvalStatus === 'approved' ? (
@@ -149,7 +149,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                 <ShieldCheck className="w-3.5 h-3.5" /> Registered
               </span>
             ) : (
-              <span className="text-[#FDB813] font-bold">Standard</span>
+              <span className="text-[#2563EB] font-bold">Standard</span>
             )}
           </div>
           <div className="flex items-center gap-2">
@@ -171,7 +171,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
           <div className="p-3 rounded-xl bg-[#08080B]/70 border border-white/10 text-center">
             <p className="text-[10px] font-mono text-gray-400 uppercase">Account Status</p>
             <p className={`font-display font-bold text-sm mt-1 ${
-              userProfile?.status === 'confirmed' ? 'text-[#10B981]' : 'text-[#FDB813]'
+              userProfile?.status === 'confirmed' ? 'text-[#10B981]' : 'text-[#2563EB]'
             }`}>
               {userProfile?.status === 'confirmed' ? 'Active' : 'Pending'}
             </p>
@@ -179,7 +179,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
           <div className="p-3 rounded-xl bg-[#08080B]/70 border border-white/10 text-center">
             <p className="text-[10px] font-mono text-gray-400 uppercase">Registration</p>
             <p className="font-display font-bold text-sm mt-1 text-white flex items-center justify-center gap-1">
-              <Calendar className="w-3 h-3 text-[#FDB813]" />
+              <Calendar className="w-3 h-3 text-[#2563EB]" />
               {referralData?.registrationDate
                 ? new Date(referralData.registrationDate).toLocaleDateString()
                 : '—'
@@ -191,29 +191,29 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         {/* Referral Stats */}
         {loadingReferral ? (
           <div className="flex items-center justify-center py-4">
-            <Loader2 className="w-5 h-5 animate-spin text-[#FDB813]" />
+            <Loader2 className="w-5 h-5 animate-spin text-[#2563EB]" />
           </div>
         ) : referralData && (
           <div className="space-y-3">
-            <h4 className="text-xs font-mono text-[#FDB813] font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <h4 className="text-xs font-mono text-[#2563EB] font-bold uppercase tracking-wider flex items-center gap-1.5">
               <TrendingUp className="w-3.5 h-3.5" />
               Referral Network
             </h4>
             <div className="grid grid-cols-3 gap-3">
               <div className="p-3 rounded-xl bg-[#08080B]/70 border border-white/10 text-center">
-                <Users className="w-4 h-4 text-[#FDB813] mx-auto mb-1" />
+                <Users className="w-4 h-4 text-[#2563EB] mx-auto mb-1" />
                 <p className="font-display font-bold text-lg text-white">{referralData.totalReferrals}</p>
                 <p className="text-[9px] font-mono text-gray-400">Direct Refs</p>
               </div>
               <div className="p-3 rounded-xl bg-[#08080B]/70 border border-white/10 text-center">
                 <Lock className="w-4 h-4 text-amber-400 mx-auto mb-1" />
                 <p className="font-display font-bold text-lg text-amber-400">{pendingBonus.toFixed(1)}</p>
-                <p className="text-[9px] font-mono text-gray-400">Locked BLove-Krack</p>
+                <p className="text-[9px] font-mono text-gray-400">Locked Fortune Protocol G</p>
               </div>
               <div className="p-3 rounded-xl bg-[#08080B]/70 border border-white/10 text-center">
                 <Award className="w-4 h-4 text-[#10B981] mx-auto mb-1" />
                 <p className="font-display font-bold text-lg text-[#10B981]">{earnedBonus.toFixed(1)}</p>
-                <p className="text-[9px] font-mono text-gray-400">Tracked BLove-Krack</p>
+                <p className="text-[9px] font-mono text-gray-400">Tracked Fortune Protocol G</p>
               </div>
             </div>
 
@@ -242,7 +242,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         {/* Share Referral Link */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-mono text-[#FDB813] font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <label className="text-xs font-mono text-[#2563EB] font-bold uppercase tracking-wider flex items-center gap-1.5">
               <Link2 className="w-3.5 h-3.5" />
               Your Referral Link
             </label>
@@ -258,11 +258,11 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                 type="text"
                 readOnly
                 value={referralLink}
-                className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#08080B]/70 border border-[#FDB813]/30 text-xs font-mono text-gray-200 outline-none select-all"
+                className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#08080B]/70 border border-[#2563EB]/30 text-xs font-mono text-gray-200 outline-none select-all"
               />
               <button
                 onClick={handleCopyLink}
-                className="btn-gold-glow px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5"
+                className="btn-primary px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5"
               >
                 {copiedLink ? <Check className="w-4 h-4 text-black" /> : <Copy className="w-4 h-4 text-black" />}
                 <span>{copiedLink ? 'Copied' : 'Copy'}</span>
@@ -282,7 +282,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
           </h4>
           <div className="space-y-1">
             <label className="text-xs font-mono text-gray-300 flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-[#FDB813]" />
+              <User className="w-3.5 h-3.5 text-[#2563EB]" />
               <span>Display Name (Optional)</span>
             </label>
             <input
@@ -290,13 +290,13 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your gamer tag / name"
-              className="w-full px-4 py-2.5 rounded-xl bg-[#08080B]/70 border border-white/10 text-xs text-white outline-none focus:border-[#FDB813]/50 transition-colors"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#08080B]/70 border border-white/10 text-xs text-white outline-none focus:border-[#2563EB]/50 transition-colors"
             />
           </div>
 
           <div className="space-y-1">
             <label className="text-xs font-mono text-gray-300 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-[#FDB813]" />
+              <Mail className="w-3.5 h-3.5 text-[#2563EB]" />
               <span>Email Address (Optional)</span>
             </label>
             <input
@@ -304,7 +304,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="email@domain.com"
-              className="w-full px-4 py-2.5 rounded-xl bg-[#08080B]/70 border border-white/10 text-xs text-white outline-none focus:border-[#FDB813]/50 transition-colors"
+              className="w-full px-4 py-2.5 rounded-xl bg-[#08080B]/70 border border-white/10 text-xs text-white outline-none focus:border-[#2563EB]/50 transition-colors"
             />
           </div>
 
@@ -319,7 +319,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 btn-gold-glow py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
+              className="flex-1 btn-primary py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
             >
               {saving && <Loader2 className="w-4 h-4 animate-spin text-black" />}
               <span>Save Profile</span>

@@ -34,7 +34,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
     } else if (!sponsorInput) {
       try {
         const urlParams = new URLSearchParams(window.location.search);
-        const ref = urlParams.get('ref') || localStorage.getItem('blove_referrer');
+        const ref = urlParams.get('ref') || localStorage.getItem('fpg_referrer') || localStorage.getItem('blove_referrer');
         if (ref && /^0x[a-fA-F0-9]{40}$/i.test(ref)) {
           setSponsorInput(ref.toLowerCase());
         }
@@ -80,9 +80,9 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
         
         {/* Card Header Tag */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FDB813]/10 border border-[#FDB813]/30 text-xs font-mono text-[#FDB813] mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#2563EB]/10 border border-[#2563EB]/30 text-xs font-mono text-[#2563EB] mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>REGISTRATION &amp; 100 BLOVE-KRACK ALLOCATION</span>
+            <span>REGISTRATION &amp; 100 FPG ALLOCATION</span>
           </div>
           <h2 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-wider">
             REGISTER &amp; REWARDS
@@ -93,11 +93,11 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
         </div>
 
         {/* Main Swap Glass Card */}
-        <div className="glass-panel-gold rounded-3xl p-6 sm:p-8 shadow-2xl border-[#FDB813]/35 relative overflow-hidden">
+        <div className="glass-panel-blue rounded-3xl p-6 sm:p-8 shadow-2xl border-[#2563EB]/35 relative overflow-hidden">
           
           {/* Top Bar inside Card */}
-          <div className="flex items-center justify-between pb-4 border-b border-[#FDB813]/15 mb-6">
-            <span className="font-display font-bold text-sm text-[#FDB813] uppercase tracking-wider flex items-center gap-2">
+          <div className="flex items-center justify-between pb-4 border-b border-[#2563EB]/15 mb-6">
+            <span className="font-display font-bold text-sm text-[#2563EB] uppercase tracking-wider flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
               Account Registration &amp; Bonus
             </span>
@@ -107,7 +107,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-gray-300 font-mono transition-colors"
             >
-              <LineChart className="w-3.5 h-3.5 text-[#FDB813]" />
+              <LineChart className="w-3.5 h-3.5 text-[#2563EB]" />
               <span>View Chart</span>
             </a>
           </div>
@@ -115,30 +115,30 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
           {/* Form Fields */}
           <div className="space-y-4">
             
-            {/* 1. TOP CARD: BLove-Krack Token (Our Token with Official Logo) */}
-            <div className="p-4 rounded-2xl bg-[#08080B]/70 border border-[#FDB813]/30 shadow-[inset_0_0_15px_rgba(253,184,19,0.05)]">
-              <div className="flex items-center justify-between text-xs text-[#FDB813] mb-2 font-mono font-semibold">
+            {/* 1. TOP CARD: fortuneprotocol.pro Token (Our Token with Official Logo) */}
+            <div className="p-4 rounded-2xl bg-[#060D19]/70 border border-[#2563EB]/30 shadow-[inset_0_0_15px_rgba(37, 99, 235,0.05)]">
+              <div className="flex items-center justify-between text-xs text-[#2563EB] mb-2 font-mono font-semibold">
                 <span>Your Allocation</span>
                 <span className="px-2 py-0.5 rounded bg-[#10B981]/20 text-[#10B981] text-[10px]">
-                  +100 BLOVE-KRACK BONUS
+                  +100 fortuneprotocol.pro BONUS
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-[#FDB813]/15 border border-[#FDB813]/40 flex items-center justify-center p-1.5 shadow-[0_0_15px_rgba(253,184,19,0.2)]">
+                  <div className="w-11 h-11 rounded-xl bg-[#2563EB]/15 border border-[#2563EB]/40 flex items-center justify-center p-1.5 shadow-[0_0_15px_rgba(37, 99, 235,0.2)]">
                     <img
-                      src="/blove-logo.png"
-                      alt="BLove-Krack"
-                      className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(253,184,19,0.6)]"
+                      src="/logo.png"
+                      alt="fortuneprotocol.pro"
+                      className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(37, 99, 235,0.6)]"
                     />
                   </div>
                   <div>
-                    <span className="font-display font-bold text-white text-base">BLove-Krack</span>
-                    <p className="text-[10px] text-[#FDB813] font-mono">BLove-Krack Protocol Token</p>
+                    <span className="font-display font-bold text-white text-base">fortuneprotocol.pro</span>
+                    <p className="text-[10px] text-[#38BDF8] font-mono">Official Protocol Token</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="font-display font-bold text-2xl gold-gradient-text">{toAmount}</span>
+                  <span className="font-display font-bold text-2xl blue-gradient-text">{toAmount}</span>
                   <p className="text-[10px] text-gray-400 font-mono">Tokens Credited</p>
                 </div>
               </div>
@@ -146,13 +146,13 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
 
             {/* Middle Switcher Icon */}
             <div className="flex justify-center -my-2 relative z-10">
-              <div className="w-10 h-10 rounded-full bg-[#1A1A24] border border-[#FDB813]/40 flex items-center justify-center text-[#FDB813] shadow-lg">
+              <div className="w-10 h-10 rounded-full bg-[#1A1A24] border border-[#2563EB]/40 flex items-center justify-center text-[#2563EB] shadow-lg">
                 <ArrowDownUp className="w-4 h-4" />
               </div>
             </div>
 
             {/* 2. BOTTOM CARD: USDT with Interactive User Input & Logo */}
-            <div className="p-4 rounded-2xl bg-[#08080B]/70 border border-white/10 hover:border-[#FDB813]/30 transition-colors">
+            <div className="p-4 rounded-2xl bg-[#060D19]/70 border border-white/10 hover:border-[#2563EB]/30 transition-colors">
               <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
                 <span className="font-medium">USDT Deposit / Amount</span>
                 <div className="flex items-center gap-1.5 font-mono text-[#22D3EE]">
@@ -163,14 +163,14 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
                       className="p-1 rounded hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
                       title="Refresh USDT Balance"
                     >
-                      <RefreshCw className={`w-3 h-3 ${refreshingBalance ? 'animate-spin text-[#FDB813]' : ''}`} />
+                      <RefreshCw className={`w-3 h-3 ${refreshingBalance ? 'animate-spin text-[#2563EB]' : ''}`} />
                     </button>
                   )}
                   {account && (
                     <button
                       type="button"
                       onClick={() => setUsdtInput(usdtBalance)}
-                      className="px-1.5 py-0.5 rounded bg-[#FDB813]/10 hover:bg-[#FDB813]/20 text-[#FFE066] text-[10px] font-bold transition-colors ml-1"
+                      className="px-1.5 py-0.5 rounded bg-[#2563EB]/10 hover:bg-[#2563EB]/20 text-[#60A5FA] text-[10px] font-bold transition-colors ml-1"
                     >
                       MAX
                     </button>
@@ -197,7 +197,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
                     value={usdtInput}
                     onChange={(e) => setUsdtInput(e.target.value)}
                     placeholder="0.00"
-                    className="w-full text-right bg-transparent text-white font-display font-bold text-xl outline-none focus:text-[#FDB813] transition-colors border-b border-white/10 focus:border-[#FDB813]/50 pb-0.5"
+                    className="w-full text-right bg-transparent text-white font-display font-bold text-xl outline-none focus:text-[#2563EB] transition-colors border-b border-white/10 focus:border-[#2563EB]/50 pb-0.5"
                   />
                   <p className="text-[10px] text-gray-400 font-mono mt-0.5">Amount (Editable)</p>
                 </div>
@@ -222,20 +222,20 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
                   value={sponsorInput}
                   onChange={(e) => setSponsorInput(e.target.value)}
                   placeholder="0x... (Auto-fills if you used a referral link)"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#08080B]/70 border border-white/10 text-xs font-mono text-gray-200 outline-none focus:border-[#FDB813]/50 transition-colors"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#060D19]/70 border border-white/10 text-xs font-mono text-gray-200 outline-none focus:border-[#2563EB]/50 transition-colors"
                 />
               </div>
             )}
 
             {/* Status Feedback Message */}
             {statusMessage && (
-              <div className="p-3 rounded-xl bg-[#FDB813]/10 border border-[#FDB813]/30 text-xs text-gray-200 flex items-center gap-2">
+              <div className="p-3 rounded-xl bg-[#2563EB]/10 border border-[#2563EB]/30 text-xs text-gray-200 flex items-center gap-2">
                 {isLoading ? (
-                  <Loader2 className="w-4 h-4 text-[#FDB813] animate-spin flex-shrink-0" />
+                  <Loader2 className="w-4 h-4 text-[#2563EB] animate-spin flex-shrink-0" />
                 ) : isApproved ? (
                   <CheckCircle className="w-4 h-4 text-[#10B981] flex-shrink-0" />
                 ) : (
-                  <AlertCircle className="w-4 h-4 text-[#FDB813] flex-shrink-0" />
+                  <AlertCircle className="w-4 h-4 text-[#2563EB] flex-shrink-0" />
                 )}
                 <span className="leading-snug">{statusMessage}</span>
               </div>
@@ -249,7 +249,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
                 className={`w-full py-4 rounded-xl text-sm font-display font-bold uppercase tracking-wider flex items-center justify-center gap-2 ${
                   isApproved
                     ? 'bg-[#10B981]/20 border border-[#10B981]/50 text-[#10B981] cursor-default'
-                    : 'btn-gold-glow'
+                    : 'btn-primary'
                 }`}
               >
                 {isLoading && <Loader2 className="w-4 h-4 animate-spin text-black" />}
@@ -259,7 +259,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
                   : !isCorrectNetwork
                   ? 'Switch to BNB Smart Chain'
                   : isApproved
-                  ? '✅ 100 BLove-Krack Enrolled & Distributed'
+                  ? '✅ 100 fortuneprotocol.pro Enrolled & Distributed'
                   : 'CONFIRM SWAP'}
               </button>
             </div>
@@ -267,7 +267,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ onSuccess }) => {
             {/* Trust Footnote */}
             <div className="pt-3 text-center">
               <p className="text-[11px] text-gray-400 leading-relaxed font-mono">
-                🔒 100 BLove-Krack tokens are credited directly to your account with 15-level referral eligibility.
+                🔒 100 fortuneprotocol.pro tokens are credited directly to your account with 15-level referral eligibility.
               </p>
             </div>
 

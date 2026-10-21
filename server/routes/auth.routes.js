@@ -62,7 +62,7 @@ async function getAndBurnNonce(address) {
  */
 function formatChallengeMessage(address, nonce, chainId) {
     return [
-        'Welcome to BLove-Krack!',
+        'Welcome to Fortune Protocol G!',
         '',
         'Sign this message to authenticate your wallet with zero gas fees.',
         'This signature verifies your ownership of this wallet address.',

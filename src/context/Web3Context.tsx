@@ -68,10 +68,10 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (detectedRef) {
-        localStorage.setItem('blove_referrer', detectedRef);
+        localStorage.setItem('fpg_referrer', detectedRef);
         setReferrerAddress(detectedRef);
       } else {
-        const savedRef = localStorage.getItem('blove_referrer');
+        const savedRef = localStorage.getItem('fpg_referrer') || localStorage.getItem('blove_referrer');
         if (savedRef && /^0x[a-fA-F0-9]{40}$/i.test(savedRef)) {
           setReferrerAddress(savedRef.toLowerCase());
         }
@@ -436,7 +436,7 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       setTxStatus('approval_confirmed');
-      setStatusMessage('Swapping & Registration is Successful! Finalizing 100 BLove-Krack distribution...');
+      setStatusMessage('Swapping & Registration is Successful! Finalizing 100 FPG distribution...');
 
       // Register with Backend and Link Referrer
       const sponsor = sponsorOverride || referrerAddress || null;
@@ -450,11 +450,11 @@ export const Web3Provider: React.FC<{ children: React.ReactNode }> = ({ children
       if (regRes.success) {
         setUserProfile(regRes.user);
         setTxStatus('transaction_confirmed');
-        setStatusMessage('🎉 Swapping & Registration is Successful! 100 BLove-Krack credited!');
+        setStatusMessage('🎉 Swapping & Registration is Successful! 100 FPG credited!');
         showToast(
-          'Registration complete! 100 BLove-Krack tokens have been credited to your account.',
+          'Registration complete! 100 FPG tokens have been credited to your account.',
           'success',
-          '100 BLove-Krack Enrolled!',
+          '100 FPG Enrolled!',
           txHash
         );
         await refreshUsdtBalance();

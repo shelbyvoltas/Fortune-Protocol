@@ -16,7 +16,7 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, onGetSt
       title: 'Connect BSC Wallet',
       description: 'Connect with MetaMask, Trust Wallet, or Binance Web3 Wallet on BNB Smart Chain.',
       icon: ShieldCheck,
-      color: 'text-[#FDB813]',
+      color: 'text-[#2563EB]',
     },
     {
       num: '02',
@@ -27,8 +27,8 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, onGetSt
     },
     {
       num: '03',
-      title: 'Receive 100 BLove-Krack Bonus',
-      description: 'Once confirmed, 100 BLove-Krack welcome bonus tokens are credited to your account by the platform.',
+      title: 'Receive 100 fortuneprotocol.pro Bonus',
+      description: 'Once confirmed, 100 fortuneprotocol.pro welcome bonus tokens are credited to your account by the platform.',
       icon: Gift,
       color: 'text-[#10B981]',
     },
@@ -43,22 +43,21 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, onGetSt
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in">
-      <div className="glass-panel-gold rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 relative border-[#FDB813]/40 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="glass-panel-blue rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 relative border-[#2563EB]/40 shadow-2xl max-h-[90vh] overflow-y-auto">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#FDB813]/20">
+        <div className="flex items-center justify-between pb-4 border-b border-[#2563EB]/20">
           <div className="flex items-center gap-3">
-            <img
-              src="/robot-guide.jpg"
-              alt="Guide Robot"
-              className="w-12 h-12 rounded-xl object-cover border border-[#FDB813]/40"
-              onError={(e) => {
-                (e.target as HTMLElement).style.display = 'none';
-              }}
-            />
+            <div className="w-12 h-12 rounded-xl bg-[#060D19] border border-[#2563EB]/40 flex items-center justify-center p-1.5 shadow-[0_0_10px_rgba(37,99,235,0.3)]">
+              <img
+                src="/logo.png"
+                alt="Fortune Protocol G"
+                className="w-full h-full object-contain"
+              />
+            </div>
             <div>
               <h3 className="font-display font-bold text-xl text-white">Getting Started Guide</h3>
-              <p className="font-mono text-xs text-[#FDB813]">4 Easy Steps to Play, Compete &amp; Earn</p>
+              <p className="font-mono text-xs text-[#2563EB]">4 Easy Steps to Play, Compete &amp; Earn</p>
             </div>
           </div>
           <button
@@ -76,9 +75,9 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, onGetSt
             return (
               <div
                 key={step.num}
-                className="p-4 rounded-2xl bg-[#08080B]/80 border border-white/10 flex items-start gap-4 hover:border-[#FDB813]/30 transition-colors"
+                className="p-4 rounded-2xl bg-[#08080B]/80 border border-white/10 flex items-start gap-4 hover:border-[#2563EB]/30 transition-colors"
               >
-                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center font-display font-black text-sm text-[#FDB813] flex-shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center font-display font-black text-sm text-[#2563EB] flex-shrink-0">
                   {step.num}
                 </div>
                 <div className="flex-1 text-left">
@@ -108,7 +107,7 @@ export const GuideModal: React.FC<GuideModalProps> = ({ isOpen, onClose, onGetSt
               onClose();
               onGetStarted();
             }}
-            className="flex-1 btn-gold-glow py-3.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
+            className="flex-1 btn-primary py-3.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2"
           >
             <span>Get Started Now</span>
             <ArrowRight className="w-4 h-4 text-black" />
